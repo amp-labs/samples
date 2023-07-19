@@ -1,4 +1,4 @@
-# This is the config file from the Quickstart tutuorial at https://docs.withampersand.com/docs/quickstart.
+# This is the config file from the Quickstart tutorial at https://docs.withampersand.com/docs/quickstart.
 
 specVersion: 0.1.0
 appName: MailMonkey
@@ -41,11 +41,12 @@ integrations:
         # Create a new lead in Salesforce whenever we make an API request.
         - objectName: lead
           mode: insert
+          # Specify the how the URL that Ampersand exposes to you should be named.
           endpoint: create-account
 
 # Integration 3
- - name: watchLeadConversion
-   displayName: Watch Lead Conversions
+ - name: subscribeToLeadConversions
+   displayName: Subscribe to Lead Conversions
    api: salesforce
    actions:
     - type: subscribe
