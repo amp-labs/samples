@@ -44,3 +44,21 @@ integrations:
       objects:
         # Create a new lead in Salesforce whenever we make an API request.
         - objectName: lead
+
+# Integration 3
+ - name: subscribeToLeadConversions
+   displayName: Subscribe to Lead Conversions
+   provider: salesforce
+   subscribe:
+      objects:
+        - objectName: lead
+          destination: leadConvertedWebhook
+          event: update
+          # We watch for changes on these fields
+          watchFields:
+            - fieldName: isConverted
+          # We also want the values of these fields to be sent to our webhook.
+          additionalFields:
+            - fieldName: firstName
+            - fieldName: lastName
+            - fieldName: email
