@@ -29,6 +29,9 @@ integrations:
           - fieldName: lastName
           - fieldName: email
           - fieldName: isConverted
+          - mapToName: leadSource
+            mapToDisplayName: Lead Source
+            prompt: Which field should we read from?
         # All other fields are optional
         optionalFieldsAuto: all
 
@@ -37,10 +40,17 @@ integrations:
    displayName: Create Leads
    provider: salesforce
    write:
+    # These are objects which are the same across all customers
     objects:
-      # Create a new lead in Salesforce whenever we make an API request.
       - objectName: lead
         mode: insert
+      - objectName: contact
+        mode: upsert
+      - objectName: tactics_c
+        createOnInstall: true
+        schema: $ref: something
+
+    # These are objects which are different across customers
     mappedObjects:
       - mapToName: objectWithNote
         mapToDisplayName: Object with Note Field
