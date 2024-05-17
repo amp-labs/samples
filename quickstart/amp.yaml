@@ -8,7 +8,7 @@ integrations:
    displayName: Read Contacts and Leads
    provider: salesforce
    read:
-    standardObjects:
+    objects:
       - objectName: contact
         destination: contactWebhook
         schedule: "*/30 * * * *" # every 30 minutes
