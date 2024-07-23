@@ -39,11 +39,10 @@ integrations:
  - name: createLeads
    displayName: Create Leads
    provider: salesforce
-   actions:
-    - type: write
-      objects:
-        # Create a new lead in Salesforce whenever we make an API request.
-        - objectName: lead
+   write:
+    objects:
+      # Create a new lead in Salesforce whenever we make an API request.
+      - objectName: lead
 
 # Integration 3
  - name: subscribeToLeadConversions
