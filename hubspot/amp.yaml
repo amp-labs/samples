@@ -1,0 +1,41 @@
+specVersion: 1.0.0
+integrations:
+  - name: hubspotCRM # Name the integration anything you want.
+    displayName: Hubspot CRM Integration
+    provider: hubspot
+    module: crm
+    # Define the objects you want to read.
+    # See https://docs.withampersand.com/docs/read-actions for more information.
+    read:
+      objects:
+        - objectName: contacts
+          destination: defaultWebhook # define your webhook in Ampersand Dashboard.
+          schedule: "*/10 * * * *" # Every 10 minutes.
+          # These are fields that are always read for every customer.
+          requiredFields:
+            - fieldName: firstname
+            - fieldName: lastname
+            - fieldName: email
+            - fieldName: lifecyclestage
+          # Add `optionalFieldsAuto` to allow customers to pick any of their Contact fields,
+          # Alternatively you can include a pre-chosen list in `optionalFields`.
+          optionalFieldsAuto: all
+        - objectName: leads
+          destination: defaultWebhook # define your webhook in Ampersand Dashboard.
+          schedule: "*/10 * * * *" # Every 10 minutes.
+          requiredFields:
+            - fieldName: hs_lead_name
+            - fieldName: hs_lead_type
+            # Allow customer to select the default or custom label field that should be used.
+            - mapToName: status
+              mapToDisplayName: Status
+              prompt: Pick the label that you use to track the status of a lead.
+          optionalFieldsAuto: all
+    # Define the objects you want to write to.
+    # See https://docs.withampersand.com/docs/write-actions for more information.
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: leads
+        - objectName: deals
+        - objectName: companies
