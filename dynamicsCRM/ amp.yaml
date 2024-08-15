@@ -1,0 +1,47 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteDynamicsCRM
+    displayName: DynamicsCRM read and write
+    provider: dynamicsCRM
+    read:
+      objects:
+
+        - objectName: contacts
+          destination: dynamicscrmWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/contact
+          requiredFields:
+            - fieldName: contactid
+            - fieldName: fullname
+            - fieldName: jobtitle
+            - fieldName: msdyn_primarytimezone
+          optionalFieldsAuto: all
+
+        - objectName: accounts
+          destination: dynamicscrmWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/account
+          requiredFields:
+            - fieldName: accountid
+            - fieldName: name
+            - fieldName: websiteurl
+          optionalFieldsAuto: all
+
+        - objectName: leads
+          destination: dynamicscrmWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://learn.microsoft.com/en-us/dynamics365/sales/developer/entities/lead
+          requiredFields:
+            - fieldName: leadid
+            - fieldName: fullname
+            - fieldName: subject
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: accounts
+        - objectName: leads
+
+    proxy:
+      enabled: true

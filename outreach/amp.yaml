@@ -1,0 +1,47 @@
+specVersion: 1.0.0
+integrations:
+ - name: readWriteOutreach
+   provider: outreach
+   read:
+     objects:
+
+      - objectName: accounts
+        destination: outreachWebhook
+        schedule: "0 */6 * * *" # every 6 hours
+        # Use any fields from https://developers.outreach.io/api/reference/tag/Account
+        requiredFields:
+          - fieldName: id
+          - fieldName: buyerIntentScore
+          - fieldName: numberOfEmployees
+        optionalFields:
+          - fieldName: tags
+
+      - objectName: mailings
+        destination: outreachWebhook
+        schedule: "0 */6 * * *" # every 6 hours
+        # Use any fields from https://developers.outreach.io/api/reference/tag/Mailing
+        requiredFields:
+          - fieldName: id
+          - fieldName: bodyText
+          - fieldName: bodyHtml
+        optionalFields:
+          - fieldName: bouncedAt
+
+      - objectName: sequences
+        destination: outreachWebhook
+        schedule: "0 */6 * * *" # every 6 hours
+        # Use any fields from https://developers.outreach.io/api/reference/tag/Sequence
+        requiredFields:
+          - fieldName: automationPercentage
+          - fieldName: description
+          - fieldName: enabledAt
+          - fieldName: locked
+        optionalFieldsAuto: all
+   
+   write:
+     objects:
+        - objectName: prospects
+        - objectName: mailings
+        - objectName: sequences
+        - objectName: mailboxes
+        - objectName: users
