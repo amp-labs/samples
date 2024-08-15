@@ -4,9 +4,10 @@ integrations:
     displayName: Salesloft read and write
     provider: salesloft
 
+    # Define what you want to read
+    # Learn more: https://docs.withampersand.com/define-integrations/read-actions
     read:
       objects:
-
         - objectName: notes
           destination: salesloftWebhook
           schedule: "*/10 * * * *" # Every 10 minutes
@@ -38,6 +39,8 @@ integrations:
             - fieldName: is_default
           optionalFieldsAuto: all
 
+    # Define what you want to write
+    # Learn more: https://docs.withampersand.com/define-integrations/write-actions
     write:
       objects:
         - objectName: notes # https://developers.salesloft.com/docs/api/notes-create
