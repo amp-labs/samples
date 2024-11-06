@@ -1,0 +1,52 @@
+# This is the config file from the Quickstart tutorial at https://docs.withampersand.com/docs/quickstart.
+
+specVersion: 1.0.0
+integrations:
+  - name: read-write-lists-notes-tasks
+    provider: attio
+    read:
+      objects:
+        - objectName: lists
+          destination: AttioWebhook
+          schedule: "*/10 * * * *"
+          # Field names come from https://developers.attio.com/reference/get_v2-lists
+          requiredFields:
+            - fieldName: id
+            - fieldName: api_slug
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: notes
+          destination: AttioWebhook
+          schedule: "*/10 * * * *"
+          # Field names come from https://developers.attio.com/reference/get_v2-notes
+          requiredFields:
+            - fieldName: id
+            - fieldName: title
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: tasks
+          destination: AttioWebhook
+          schedule: "*/10 * * * *"
+          # Field names come from https://developers.attio.com/reference/get_v2-tasks
+          requiredFields:
+            - fieldName: id
+            - fieldName: content_plaintext
+            - fieldName: deadline_at
+            - fieldName: is_completed
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+    write:
+      objects:
+        - objectName: lists
+        - objectName: notes
+        - objectName: tasks
+
+    proxy:
+      enabled: true
