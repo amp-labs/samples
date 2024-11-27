@@ -1,0 +1,30 @@
+specVersion: 1.0.0
+integrations:
+- displayName: Sample Klaviyo Integration
+  name: klaviyo-sample
+  provider: klaviyo
+  read:
+    objects:
+    - objectName: profiles
+      backfill:
+        defaultPeriod:
+          fullHistory: true
+      destination: klaviyo-webhook
+      optionalFieldsAuto: all
+      schedule: '*/10 * * * *'
+    - objectName: segments
+      backfill:
+        defaultPeriod:
+          fullHistory: true
+      destination: klaviyo-webhook
+      optionalFieldsAuto: all
+      schedule: '*/10 * * * *'
+    - objectName: lists
+      backfill:
+        defaultPeriod:
+          fullHistory: true
+      destination: klaviyo-webhook
+      optionalFieldsAuto: all
+      schedule: '*/10 * * * *'
+  proxy:
+    enabled: true
