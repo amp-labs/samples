@@ -16,6 +16,9 @@ integrations:
             - fieldName: id
             - fieldName: content
           optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
 
         - objectName: accounts
           destination: salesloftWebhook
@@ -27,6 +30,9 @@ integrations:
             - fieldName: size
             - fieldName: tags
           optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
 
         - objectName: saved_list_views
           destination: salesloftWebhook
@@ -38,6 +44,9 @@ integrations:
             - fieldName: view
             - fieldName: is_default
           optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
 
     # Define what you want to write
     # Learn more: https://docs.withampersand.com/define-integrations/write-actions

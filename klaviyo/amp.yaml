@@ -12,6 +12,7 @@ integrations:
       destination: klaviyo-webhook
       optionalFieldsAuto: all
       schedule: '*/10 * * * *'
+
     - objectName: segments
       backfill:
         defaultPeriod:
@@ -19,6 +20,7 @@ integrations:
       destination: klaviyo-webhook
       optionalFieldsAuto: all
       schedule: '*/10 * * * *'
+
     - objectName: lists
       backfill:
         defaultPeriod:
@@ -26,11 +28,13 @@ integrations:
       destination: klaviyo-webhook
       optionalFieldsAuto: all
       schedule: '*/10 * * * *'
+
   write:
     objects:
     - objectName: profiles
     - objectName: segments
     - objectName: lists
     - objectName: events
+
   proxy:
     enabled: true

@@ -15,6 +15,9 @@ integrations:
           - fieldName: numberOfEmployees
         optionalFields:
           - fieldName: tags
+        backfill:
+          defaultPeriod:
+            fullHistory: true
 
       - objectName: mailings
         destination: outreachWebhook
@@ -26,6 +29,9 @@ integrations:
           - fieldName: bodyHtml
         optionalFields:
           - fieldName: bouncedAt
+        backfill:
+          defaultPeriod:
+            fullHistory: true
 
       - objectName: sequences
         destination: outreachWebhook
@@ -37,6 +43,9 @@ integrations:
           - fieldName: enabledAt
           - fieldName: locked
         optionalFieldsAuto: all
+        backfill:
+          defaultPeriod:
+            fullHistory: true
    
    write:
      objects:
