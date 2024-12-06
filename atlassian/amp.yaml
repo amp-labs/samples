@@ -12,6 +12,7 @@ integrations:
             - fieldName: project
             - fieldName: id
             - fieldName: summary
+          optionalFieldsAuto: all
     write:
       objects:
         - objectName: issue
