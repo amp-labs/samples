@@ -3,6 +3,7 @@ integrations:
   - name: atlassian-issues
     displayName: Read and Write Atlassian Issues
     provider: atlassian
+    module: jira
     read:
       objects:
         - objectName: issue 
