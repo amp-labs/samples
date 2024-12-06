@@ -1,0 +1,22 @@
+# Read more on how to use this integration with Atlassian Connect: https://ampersand.slab.com/posts/atlassian-connect-support-private-preview-voc44x6o
+# Make sure your app has the 'READ' and/or 'WRITE' scopes added in the atlassian-connect manifest!
+specVersion: 1.0.0
+integrations:
+  - name: read-atlassian-issues
+    displayName: Read Atlassian Issues
+    provider: atlassian
+    read:
+      objects:
+        - objectName: issue 
+          destination: accountWebhook
+          schedule: "*/15 * * * *"
+          requiredFields:
+            - fieldName: project
+            - fieldName: id
+            - fieldName: summary
+    proxy:
+      enabled: true
+    # Make sure your app has the 'WRITE' scope added in the atlassian-connect manifest!
+    write:
+      objects:
+        - objectName: issue
