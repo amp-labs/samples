@@ -45,6 +45,13 @@ integrations:
             defaultPeriod:
               fullHistory: true
 
+    write:
+      objects:
+        - objectName: account
+          inheritMapping: true
+        - objectName: contact
+          inheritMapping: true
+
   - name: hubspotIntegration
     displayName: Hubspot Integration
     provider: hubspot
@@ -82,3 +89,10 @@ integrations:
           backfill:
             defaultPeriod:
               fullHistory: true
+
+    write:
+      objects:
+        - objectName: company
+          inheritMapping: true
+        - objectName: contact
+          inheritMapping: true
