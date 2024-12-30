@@ -1,0 +1,44 @@
+specVersion: 1.0.0
+integrations:
+  - name: readWriteZohoSample
+    provider: zoho
+    read:
+      objects:
+        # Creating an object for reading Deals resource.
+        - objectName: Deals
+          destination: zohoWebhook
+          schedule: "*/30 * * * *" # Every 30 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: Account_Name
+            - fieldName: Amount
+          optionalFields:
+            - fieldName: Contact_Name
+
+        # Creating an object for reading Leads resource.
+        - objectName: Leads
+          destination: zohoWebhook
+          schedule: "*/30 * * * *" # Every 30 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: Email
+            - fieldName: Company
+          optionalFields:
+            - fieldName: City
+
+        # Creating an object for reading Contacts resource.
+        - objectName: Contacts
+          destination: zohoWebhook
+          schedule: "*/30 * * * *" # Every 30 minutes
+          requiredFields:
+            - fieldName: Assistant
+            - fieldName: Full_Name
+            - fieldName: Created_Time
+            - fieldName: Created_By
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: Contacts
+        - objectName: Leads
+        - objectName: Deals
