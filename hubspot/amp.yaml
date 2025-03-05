@@ -37,6 +37,26 @@ integrations:
           backfill:
             defaultPeriod:
               fullHistory: true
+        - objectName: users # users in the Hubspot workspace
+          destination: defaultWebhook
+          schedule: "0 0 * * *" # every day
+          requiredFields:
+            - fieldName: hs_object_id
+              mapToName: userId
+            - fieldName: hubspot_owner_id
+              mapToName: ownerId # each Hubspot user is assigned an owner ID
+            - fieldName: hs_email
+              mapToName: emailAddress
+            - fieldName: hs_family_name
+              mapToName: lastName
+            - fieldName: hs_given_name
+              mapToName: firstName
+            - fieldName: hs_createdate
+              mapToName: createTime
+            - fieldName: hs_lastmodifieddate
+              mapToName: updateTime
+            - fieldName: hs_deactivated
+              mapToName: isDeactivated   
     # Define the objects you want to write to.
     # See https://docs.withampersand.com/docs/write-actions for more information.
     write:
