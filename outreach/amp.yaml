@@ -1,5 +1,19 @@
 specVersion: 1.0.0
 integrations:
+ - name: write-outreach
+   displayName: Write outreach
+   provider: outreach
+   proxy:
+     enabled: true
+   write:
+     objects:
+       - objectName: prospects
+       - objectName: sequences
+       - objectName: sequenceSteps
+       - objectName: sequenceStates
+       - objectName: sequenceTemplates
+       - objectName: templates
+        
  - name: readWriteOutreach
    provider: outreach
    read:
