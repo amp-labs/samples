@@ -48,6 +48,21 @@ integrations:
             defaultPeriod:
               fullHistory: true
 
+        - objectName: activities/calls
+          destination: salesloftWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://developers.salesloft.com/docs/api/activities-calls-index/
+          requiredFields:
+            - fieldName: id
+            - fieldName: duration
+            - fieldName: recordings
+            - fieldName: user
+            - fieldName: note
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
     # Define what you want to write
     # Learn more: https://docs.withampersand.com/define-integrations/write-actions
     write:
@@ -55,6 +70,7 @@ integrations:
         - objectName: notes # https://developers.salesloft.com/docs/api/notes-create
         - objectName: accounts # https://developers.salesloft.com/docs/api/accounts-create/
         - objectName: saved_list_views # https://developers.salesloft.com/docs/api/saved-list-views-create
+        - objectName: activities/calls # https://developers.salesloft.com/docs/api/activities-calls-create/
 
     proxy:
       enabled: true
