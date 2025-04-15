@@ -5,7 +5,7 @@ integrations:
     provider: github
     read:
       objects:
-        - objectName: emails
+        - objectName: user/emails
           destination: githubWebhook
           schedule: "*/10 * * * *"
           requiredFields:
