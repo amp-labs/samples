@@ -1,6 +1,7 @@
 # This example manifest demonstrates how you can make use of object and field mappings in Ampersand
 # to create your own "unified API" for CRMs, using Hubspot and Salesforce as examples.
 # When you receive data that has been synced from either CRM, it will have the same schema.
+# Learn more about object and field mapping at https://docs.withampersand.com/object-and-field-mapping.
 
 specVersion: 1.0.0
 integrations:
