@@ -32,6 +32,7 @@ integrations:
         - objectName: custom_field_definitions
           destination: ahaWebhook
           schedule: "*/10 * * * *"
+          # Field names can be found at https://www.aha.io/api/resources/custom_fields/list_all_custom_fields
           requiredFields:
             - fieldName: id
             - fieldName: name
@@ -54,10 +55,7 @@ integrations:
         - objectName: products
         - objectName: idea_users
         - objectName: integrations
-        - objectName: historical_audits
-        - objectName: idea_organizations
         - objectName: tasks
         - objectName: team_members
-        - objectName: release_phases
     proxy:
       enabled: true
