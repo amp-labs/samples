@@ -1,0 +1,61 @@
+specVersion: 1.0.0
+integrations:
+  - name: readWriteAha
+    displayName: Aha Read Write
+    provider: aha
+    read:
+      objects:
+        - objectName: audits
+          destination: ahaWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://www.aha.io/api/resources/audits/retrieve_record_history
+          requiredFields:
+            - fieldName: id
+            - fieldName: created_at
+            - fieldName: audit_action
+          optionalFields:
+            - fieldName: interesting
+            - fieldName: user
+            - fieldName: contributors
+            - fieldName: auditable_type
+
+        - objectName: screen_definitions
+          destination: ahaWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://www.aha.io/api/resources/custom_layouts/list_all_custom_layouts
+          requiredFields:
+          - fieldName: id
+          - fieldName: screenable_type
+          - fieldName: name    
+          - fieldName: custom_field_definitions    
+          
+        - objectName: custom_field_definitions
+          destination: ahaWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://www.aha.io/api/resources/custom_fields/list_all_custom_fields
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: key
+          optionalFieldsAuto: all
+      
+        - objectName: ideas/endorsements
+          destination: ahaWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://www.aha.io/api/resources/idea_votes/list_votes_for_an_account
+          requiredFields:
+            - fieldName: id
+            - fieldName: idea_id
+            - fieldName: created_at
+            - fieldName: updated_at
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: products
+        - objectName: idea_users
+        - objectName: integrations
+        - objectName: tasks
+        - objectName: team_members
+    proxy:
+      enabled: true
