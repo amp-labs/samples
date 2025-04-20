@@ -1,7 +1,7 @@
 specVersion: 1.0.0
 integrations:
-  - name: readWriteClickup
-    displayName: Clickup read and write 
+  - name: readClickup
+    displayName: Clickup read 
     provider: clickup
     read:
       objects:
