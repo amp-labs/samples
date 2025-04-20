@@ -1,0 +1,19 @@
+specVersion: 1.0.0
+integrations:
+  - name: readWriteClickup
+    displayName: Clickup read and write 
+    provider: clickup
+    read:
+      objects:
+        - objectName: team
+          destination: clickupWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: avatar
+          optionalFields:
+            - fieldName: color
+            - fieldName: members
+    proxy:
+      enabled: true
