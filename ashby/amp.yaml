@@ -5,7 +5,7 @@ integrations:
     provider: ashby
     read:
       objects:
-        - objectName: application.list
+        - objectName: application
           destination: ashbyWebhook
           schedule: "*/10 * * * *"
           # Field names come from https://developers.ashbyhq.com/reference/applicationlist
@@ -21,7 +21,7 @@ integrations:
             - fieldName: creditedToUser
             - fieldName: archiveReason  
 
-        - objectName: interview.list
+        - objectName: interview
           destination: ashbyWebhook
           schedule: "*/10 * * * *"
           # Field names come from https://developers.ashbyhq.com/reference/interviewlist
@@ -30,7 +30,7 @@ integrations:
           - fieldName: title
           - fieldName: isArchived    
           
-        - objectName: feedbackFormDefinition.list
+        - objectName: feedbackFormDefinition
           destination: ashbyWebhook
           schedule: "*/10 * * * *"
           # Field names come from https://developers.ashbyhq.com/reference/feedbackformdefinitionlist
@@ -40,7 +40,7 @@ integrations:
             - fieldName: isDefaultForm
           optionalFieldsAuto: all
       
-        - objectName: candidate.list
+        - objectName: candidate
           destination: ashbyWebhook
           schedule: "*/10 * * * *"
           # Field names come from https://developers.ashbyhq.com/reference/candidatelist
@@ -51,7 +51,7 @@ integrations:
             - fieldName: emailAddresses
           optionalFieldsAuto: all
 
-        - objectName: job.list
+        - objectName: job
           destination: ashbyWebhook
           schedule: "*/10 * * * *"
           # Field names come from https://developers.ashbyhq.com/reference/joblist
@@ -64,9 +64,9 @@ integrations:
 
     write:
       objects:
-        - objectName: application.create
-        - objectName: candidate.create
-        - objectName: job.create
+        - objectName: application
+        - objectName: candidate
+        - objectName: job
 
     proxy:
       enabled: true
