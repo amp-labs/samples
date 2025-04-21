@@ -1,0 +1,54 @@
+# This is the config file from the Quickstart tutorial at https://docs.withampersand.com/docs/quickstart.
+
+specVersion: 1.0.0
+integrations:
+  - name: read-write-heyreach
+    provider: heyreach
+    read:
+      objects:
+        - objectName: campaign/GetAll
+          destination: heyreachWebhook
+          schedule: "*/10 * * * *"
+          # Field names come from https://documenter.getpostman.com/view/23808049/2sA2xb5F75#4aaf461e-54c4-4447-beb6-eb5ccca53fb3
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: li_account/GetAll
+          destination: heyreachWebhook
+          schedule: "*/10 * * * *"
+          # Field names come from https://documenter.getpostman.com/view/23808049/2sA2xb5F75#8a4d2924-d46c-443f-a4df-65216988a091
+          requiredFields:
+            - fieldName: id
+            - fieldName: emailAddress
+            - fieldName: firstName
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: list/GetAll
+          destination: heyreachWebhook
+          schedule: "*/10 * * * *"
+          # Field names come from https://documenter.getpostman.com/view/23808049/2sA2xb5F75#c8ef68b4-c329-41ae-8298-72f2336bbb78
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+    write:
+      objects:
+        - objectName: list/CreateEmptyList
+        - objectName: campaign/AddLeadsToCampaignV2
+        - objectName: list/AddLeadsToListV2
+        - objectName: inbox/SendMessage
+
+    proxy:
+      enabled: true
