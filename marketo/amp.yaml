@@ -1,0 +1,47 @@
+specVersion: 1.0.0
+integrations:
+  - name: readWriteMarketo
+    provider: marketo
+    read:
+      objects:
+        # More fields can be seen here
+        # https://developer.adobe.com/marketo-apis/api/mapi/#operation/getLeadsByFilterUsingGET
+        - objectName: leads
+          destination: marketoWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: membership
+            - fieldName: status
+          optionalFields:
+            - fieldName: reason
+
+        # More fields can be seen here
+        # https://developer.adobe.com/marketo-apis/api/mapi/#operation/getCompaniesUsingGET
+        - objectName: activities
+          destination: marketoWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: reasons
+            - fieldName: status
+          optionalFields:
+            - fieldName: seq
+
+        # More fields can be seen here
+        # https://developer.adobe.com/marketo-apis/api/mapi/#operation/getCampaignsUsingGET
+        - objectName: campaigns
+          destination: marketoWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: active
+            - fieldName: id
+            - fieldName: updatedAt
+            - fieldName: name
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: leads
+        - objectName: companies
+        - objectName: opportunities
