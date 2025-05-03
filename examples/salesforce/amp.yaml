@@ -1,0 +1,48 @@
+# This is the config file from the Quickstart tutorial at https://docs.withampersand.com/quickstart.
+
+specVersion: 1.0.0
+integrations:
+  - name: mailmonkey-salesforce
+    displayName: MailMonkey Salesforce Integration
+    provider: salesforce
+    read:
+      objects:
+        - objectName: contact
+          destination: contactWebhook
+          schedule: "*/30 * * * *" # every 30 minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          # Always read these fields
+          requiredFields:
+            - fieldName: firstname
+            - fieldName: lastname
+            - fieldName: email
+          # Customer can decide if they want us to read these fields.
+          optionalFields:
+            - fieldName: salutation
+            - mapToName: linkedin_url
+              mapToDisplayName: LinkedIn URL
+              prompt: Which do field do you use for the LinkedIn URL for the contact?
+        - objectName: lead
+          destination: leadsWebhook
+          schedule: "*/30 * * * *" # every 30 minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: firstname
+            - fieldName: lastname
+            - fieldName: email
+            - fieldName: isconverted
+            # Allow the customer to pick a field to map to priority score
+            - mapToName: priority
+              mapToDisplayName: Priority Score
+              prompt: Which field do you use to track the priority of a lead?
+          # All other fields in a Lead are optional,
+          # Customers can pick from all of them.
+          optionalFieldsAuto: all
+      write:
+        objects:
+          # Create a new lead in Salesforce whenever we make an API request.
+          - objectName: lead

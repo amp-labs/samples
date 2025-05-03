@@ -1,0 +1,47 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteBrevo
+    displayName: Brevo read and write
+    provider: brevo
+    read:
+      objects:
+        - objectName: attributes/deals
+          destination: brevoWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: attributeTypeName
+            - fieldName: internalName
+            - fieldName: label
+          optionalFields:
+            - fieldName: attributeOptions
+            - fieldName: isRequired
+
+        - objectName: contacts
+          destination: brevoWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: email
+            - fieldName: id
+            - fieldName: createdAt
+          optionalFieldsAuto: all
+
+        - objectName: companies
+          destination: brevoWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: attributes
+          optionalFields:
+            - fieldName: linkedContactsIds
+            - fieldName: linkedDealsIds
+
+
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: companies
+        - objectName: crm/attributes
+        - objectName: smtp/email
+        - objectName: smtp/templates
+    proxy:
+      enabled: true

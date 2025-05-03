@@ -1,0 +1,21 @@
+specVersion: 1.0.0
+integrations:
+  - name: atlassian-issues
+    displayName: Read and Write Atlassian Issues
+    provider: atlassian
+    module: jira
+    read:
+      objects:
+        - objectName: issue 
+          destination: defaultWebhook
+          schedule: "*/15 * * * *"
+          requiredFields:
+            - fieldName: project
+            - fieldName: id
+            - fieldName: summary
+          optionalFieldsAuto: all
+    write:
+      objects:
+        - objectName: issue
+    proxy:
+      enabled: true

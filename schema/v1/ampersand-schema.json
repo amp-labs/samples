@@ -1,0 +1,549 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ampersand Manifest Schema",
+  "description": "Schema for defining Ampersand integrations in amp.yaml files",
+  "type": "object",
+  "required": [
+    "specVersion",
+    "integrations"
+  ],
+  "properties": {
+    "specVersion": {
+      "type": "string",
+      "description": "The version of the manifest specification",
+      "enum": [
+        "1.0.0"
+      ]
+    },
+    "integrations": {
+      "type": "array",
+      "description": "An array of integration configurations",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/integration"
+      }
+    }
+  },
+  "definitions": {
+    "integration": {
+      "type": "object",
+      "required": [
+        "name",
+        "provider"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "A unique identifier for this integration",
+          "pattern": "^[a-z0-9_-]+$",
+          "maxLength": 64
+        },
+        "displayName": {
+          "type": "string",
+          "description": "A human-readable name for this integration",
+          "maxLength": 100
+        },
+        "provider": {
+          "type": "string",
+          "description": "The provider/platform for this integration",
+          "examples": [
+            "salesforce",
+            "hubspot",
+            "intercom",
+            "github",
+            "jira",
+            "apollo",
+            "aha",
+            "ashby",
+            "attio",
+            "brevo",
+            "close",
+            "gong",
+            "heyreach",
+            "instantly",
+            "iterable",
+            "kit",
+            "klaviyo",
+            "marketo",
+            "monday",
+            "outreach",
+            "pipedrive",
+            "salesloft",
+            "smartlead",
+            "stripe",
+            "zoho",
+            "zendesk"
+          ]
+        },
+        "module": {
+          "type": "string",
+          "description": "An optional module within the provider",
+          "examples": [
+            "crm",
+            "jira"
+          ]
+        },
+        "authentication": {
+          "$ref": "#/definitions/authentication"
+        },
+        "read": {
+          "$ref": "#/definitions/read"
+        },
+        "write": {
+          "$ref": "#/definitions/write"
+        },
+        "subscribe": {
+          "$ref": "#/definitions/subscribe"
+        },
+        "proxy": {
+          "$ref": "#/definitions/proxy"
+        }
+      }
+    },
+    "authentication": {
+      "type": "object",
+      "description": "Authentication configuration for the integration",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The authentication type",
+          "enum": [
+            "oauth2",
+            "api_key",
+            "basic",
+            "jwt"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "oauth2"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "clientId",
+              "clientSecret"
+            ],
+            "properties": {
+              "clientId": {
+                "type": "string",
+                "description": "The OAuth2 client ID"
+              },
+              "clientSecret": {
+                "type": "string",
+                "description": "The OAuth2 client secret"
+              },
+              "scopes": {
+                "type": "array",
+                "description": "List of OAuth2 scopes to request",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "api_key"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "apiKey"
+            ],
+            "properties": {
+              "apiKey": {
+                "type": "string",
+                "description": "The API key"
+              },
+              "headerName": {
+                "type": "string",
+                "description": "The header name for the API key"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "basic"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "username",
+              "password"
+            ],
+            "properties": {
+              "username": {
+                "type": "string",
+                "description": "The username for basic authentication"
+              },
+              "password": {
+                "type": "string",
+                "description": "The password for basic authentication"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "jwt"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "privateKey"
+            ],
+            "properties": {
+              "privateKey": {
+                "type": "string",
+                "description": "The private key for JWT"
+              },
+              "issuer": {
+                "type": "string",
+                "description": "The issuer for JWT"
+              },
+              "subject": {
+                "type": "string",
+                "description": "The subject for JWT"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "read": {
+      "type": "object",
+      "description": "Configuration for reading data from the provider",
+      "required": [
+        "objects"
+      ],
+      "properties": {
+        "objects": {
+          "type": "array",
+          "description": "List of objects to read from the provider",
+          "items": {
+            "$ref": "#/definitions/readObject"
+          }
+        }
+      }
+    },
+    "readObject": {
+      "type": "object",
+      "description": "Configuration for a specific object to read",
+      "required": [
+        "objectName",
+        "destination",
+        "schedule",
+        "requiredFields"
+      ],
+      "properties": {
+        "objectName": {
+          "type": "string",
+          "description": "The name of the object to read"
+        },
+        "mapToName": {
+          "type": "string",
+          "description": "An optional name mapping for this object"
+        },
+        "mapToDisplayName": {
+          "type": "string",
+          "description": "An optional display name mapping for this object"
+        },
+        "destination": {
+          "type": "string",
+          "description": "The webhook destination for the read data"
+        },
+        "schedule": {
+          "type": "string",
+          "description": "A cron schedule for reading the data",
+          "pattern": "^(\\*|[0-5]?[0-9]|\\*/[0-9]+)\\s+(\\*|[01]?[0-9]|2[0-3]|\\*/[0-9]+)\\s+(\\*|[0-2]?[0-9]|3[01]|\\*/[0-9]+)\\s+(\\*|[0]?[0-9]|1[0-2]|\\*/[0-9]+)\\s+(\\*|[0-6]|\\*/[0-9]+)$",
+          "examples": [
+            "*/10 * * * *",
+            "*/30 * * * *",
+            "0 0 * * *"
+          ]
+        },
+        "requiredFields": {
+          "type": "array",
+          "description": "Fields that are always read",
+          "items": {
+            "$ref": "#/definitions/field"
+          }
+        },
+        "optionalFields": {
+          "type": "array",
+          "description": "Optional fields that can be included",
+          "items": {
+            "$ref": "#/definitions/field"
+          }
+        },
+        "optionalFieldsAuto": {
+          "type": "string",
+          "description": "Automatically include all available fields",
+          "enum": [
+            "all"
+          ]
+        },
+        "backfill": {
+          "type": "object",
+          "description": "Configuration for backfilling historical data",
+          "properties": {
+            "defaultPeriod": {
+              "type": "object",
+              "properties": {
+                "fullHistory": {
+                  "type": "boolean",
+                  "description": "Whether to backfill the full history"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "field": {
+      "type": "object",
+      "description": "Configuration for a field",
+      "oneOf": [
+        {
+          "required": [
+            "fieldName"
+          ],
+          "properties": {
+            "fieldName": {
+              "type": "string",
+              "description": "The name of the field in the provider's API"
+            },
+            "mapToName": {
+              "type": "string",
+              "description": "An optional name mapping for this field"
+            },
+            "mapToDisplayName": {
+              "type": "string",
+              "description": "An optional display name mapping for this field"
+            }
+          }
+        },
+        {
+          "required": [
+            "mapToName",
+            "mapToDisplayName",
+            "prompt"
+          ],
+          "properties": {
+            "mapToName": {
+              "type": "string",
+              "description": "A name mapping for this field"
+            },
+            "mapToDisplayName": {
+              "type": "string",
+              "description": "A display name mapping for this field"
+            },
+            "prompt": {
+              "type": "string",
+              "description": "A prompt to show when configuring this field"
+            }
+          }
+        }
+      ]
+    },
+    "write": {
+      "type": "object",
+      "description": "Configuration for writing data to the provider",
+      "required": [
+        "objects"
+      ],
+      "properties": {
+        "objects": {
+          "type": "array",
+          "description": "List of objects that can be written to",
+          "items": {
+            "$ref": "#/definitions/writeObject"
+          }
+        }
+      }
+    },
+    "writeObject": {
+      "type": "object",
+      "description": "Configuration for a specific object to write to",
+      "required": [
+        "objectName"
+      ],
+      "properties": {
+        "objectName": {
+          "type": "string",
+          "description": "The name of the object to write to"
+        },
+        "inheritMapping": {
+          "type": "boolean",
+          "description": "Whether to inherit mappings from read configuration"
+        }
+      }
+    },
+    "subscribe": {
+      "type": "object",
+      "description": "Configuration for subscribing to events from the provider",
+      "required": [
+        "events"
+      ],
+      "properties": {
+        "events": {
+          "type": "array",
+          "description": "List of events to subscribe to",
+          "items": {
+            "$ref": "#/definitions/event"
+          }
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "description": "Configuration for a specific event to subscribe to",
+      "required": [
+        "eventType",
+        "destination"
+      ],
+      "properties": {
+        "eventType": {
+          "type": "string",
+          "description": "The type of event to subscribe to"
+        },
+        "destination": {
+          "type": "string",
+          "description": "The webhook destination for the event data"
+        },
+        "filter": {
+          "type": "object",
+          "description": "Filter to apply to events",
+          "required": [
+            "conditions"
+          ],
+          "properties": {
+            "conditions": {
+              "type": "array",
+              "description": "Conditions to filter by",
+              "items": {
+                "type": "object",
+                "required": [
+                  "field",
+                  "operator",
+                  "value"
+                ],
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "description": "The field to filter on"
+                  },
+                  "operator": {
+                    "type": "string",
+                    "description": "The operator to use",
+                    "enum": [
+                      "equals",
+                      "not_equals",
+                      "contains",
+                      "not_contains",
+                      "starts_with",
+                      "ends_with",
+                      "greater_than",
+                      "less_than"
+                    ]
+                  },
+                  "value": {
+                    "description": "The value to compare against",
+                    "type": [
+                      "string",
+                      "number",
+                      "boolean"
+                    ]
+                  }
+                }
+              }
+            },
+            "operator": {
+              "type": "string",
+              "description": "How to combine the conditions",
+              "enum": [
+                "and",
+                "or"
+              ],
+              "default": "and"
+            }
+          }
+        },
+        "transform": {
+          "type": "object",
+          "description": "Transformation to apply to event data",
+          "required": [
+            "mappings"
+          ],
+          "properties": {
+            "mappings": {
+              "type": "array",
+              "description": "Field mappings for the transformation",
+              "items": {
+                "type": "object",
+                "required": [
+                  "source",
+                  "target"
+                ],
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "description": "The source field path"
+                  },
+                  "target": {
+                    "type": "string",
+                    "description": "The target field name"
+                  }
+                }
+              }
+            },
+            "includeOriginal": {
+              "type": "boolean",
+              "description": "Whether to include the original event data",
+              "default": true
+            }
+          }
+        }
+      }
+    },
+    "proxy": {
+      "type": "object",
+      "description": "Configuration for proxying API calls",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether proxy is enabled for this integration",
+          "default": false
+        }
+      }
+    }
+  }
+}

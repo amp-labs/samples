@@ -1,0 +1,45 @@
+specVersion: 1.0.0
+integrations:
+  - name: readWritePipedrive
+    provider: pipedrive
+    read:
+      objects:
+        # Creating a resource for reading Activities object.
+        - objectName: activities
+          destination: pipedriveWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: note
+            - fieldName: assigned_to_user_id
+          optionalFields:
+            - fieldName: lead_id
+
+        # Creating a resource for reading Deals object.
+        - objectName: deals
+          destination: pipedriveWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: title
+            - fieldName: probability
+          optionalFields:
+            - fieldName: email_messages_count
+
+        # Creating a resource for reading Leads object.
+        - objectName: leads
+          destination: pipedriveWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: owner_id
+            - fieldName: source_name
+            - fieldName: expected_close_date
+            - fieldName: was_seen
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: activities
+        - objectName: deals
+        - objectName: leads
+        - objectName: notes

@@ -1,0 +1,99 @@
+# This example manifest demonstrates how you can make use of object and field mappings in Ampersand
+# to create your own "unified API" for CRMs, using Hubspot and Salesforce as examples.
+# When you receive data that has been synced from either CRM, it will have the same schema.
+# Learn more about object and field mapping at https://docs.withampersand.com/object-and-field-mapping.
+
+specVersion: 1.0.0
+integrations:
+  - name: salesforceIntegration
+    displayName: Salesforce Integration
+    provider: salesforce
+    read:
+      objects:
+
+        - objectName: account
+          mapToName: company # Always map the account object to company
+          mapToDisplayName: Company
+          destination: defaultWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: name
+            - fieldName: phone
+            - fieldName: annualrevenue
+            - fieldName: numberofemployees
+            - fieldName: website
+            # Salesforce has multiple country fields, ask user which one they want to use
+            - mapToName: country
+              mapToDisplayName: Country
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: contact
+          destination: defaultWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: firstname
+            - fieldName: lastname
+            - fieldName: email
+            # Salesforce has multiple phone fields, ask user which one they want to use
+            - mapToName: phone
+              mapToDisplayName: Phone
+            # Always map the lastactivity field to lastcontacted
+            - fieldName: lastactivity
+              mapToName: lastcontacted
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+    write:
+      objects:
+        - objectName: account
+          inheritMapping: true
+        - objectName: contact
+          inheritMapping: true
+
+  - name: hubspotIntegration
+    displayName: Hubspot Integration
+    provider: hubspot
+    module: crm
+    read:
+      objects:
+
+        - objectName: company
+          destination: defaultWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: name
+            - fieldName: phone
+            - fieldName: annualrevenue
+            - fieldName: numberofemployees
+            - fieldName: website
+            - fieldName: country
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: contact
+          destination: defaultWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes.
+          requiredFields:
+            - fieldName: firstname
+            - fieldName: lastname
+            - fieldName: email
+            # Hubspot has multiple phone fields, ask user which one they want to use
+            - mapToName: phone
+              mapToDisplayName: Phone
+            # Always map the notes_last_contacted field to lastcontacted
+            - fieldName: notes_last_contacted
+              mapToName: lastcontacted
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+    write:
+      objects:
+        - objectName: company
+          inheritMapping: true
+        - objectName: contact
+          inheritMapping: true
