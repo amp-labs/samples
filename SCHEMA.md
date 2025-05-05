@@ -94,7 +94,6 @@ Each integration defines a connection to a specific provider (e.g., Salesforce, 
 name: my-integration
 displayName: My Integration
 provider: salesforce
-module: crm
 ```
 
 | Field | Type | Required | Description |
@@ -102,7 +101,6 @@ module: crm
 | `name` | String | Yes | A unique identifier for this integration within your manifest. Use lowercase alphanumeric characters, hyphens and underscores only. Maximum length: 64 characters. |
 | `displayName` | String | No | A human-readable name for this integration. This name is displayed in the UI and logs. If not provided, `name` is used. Maximum length: 100 characters. |
 | `provider` | String | Yes | The provider/platform for this integration. Must be one of the supported providers (e.g., `salesforce`, `hubspot`, `intercom`). Case-sensitive. |
-| `module` | String | No | An optional module within the provider (e.g., `crm`, `jira`). Some providers have multiple modules that can be targeted separately. |
 
 ### Naming Conventions:
 
@@ -139,75 +137,6 @@ The `provider` field must match one of the supported providers. Common providers
 - `stripe`: Stripe payments
 - `zoho`: Zoho CRM
 - `zendesk`: Zendesk customer service
-
-## Authentication Configuration
-
-The authentication configuration specifies how your integration authenticates with the provider. Ampersand supports various authentication methods depending on the provider.
-
-```yaml
-authentication:
-  type: oauth2
-  clientId: ${CLIENT_ID}
-  clientSecret: ${CLIENT_SECRET}
-  scopes:
-    - read:contacts
-    - write:contacts
-```
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `type` | String | Yes | The authentication type. Common values: `oauth2`, `api_key`, `basic`, `jwt`. |
-| `clientId` | String | Conditional | For OAuth2, the client ID. You can use environment variables with `${VAR_NAME}` syntax. |
-| `clientSecret` | String | Conditional | For OAuth2, the client secret. You can use environment variables with `${VAR_NAME}` syntax. |
-| `scopes` | Array | Conditional | For OAuth2, the list of scopes to request. |
-| `apiKey` | String | Conditional | For API key authentication, the API key. You can use environment variables with `${VAR_NAME}` syntax. |
-| `username` | String | Conditional | For basic authentication, the username. You can use environment variables with `${VAR_NAME}` syntax. |
-| `password` | String | Conditional | For basic authentication, the password. You can use environment variables with `${VAR_NAME}` syntax. |
-
-### Authentication Types:
-
-1. **OAuth2 Authentication**:
-```yaml
-authentication:
-  type: oauth2
-  clientId: ${CLIENT_ID}
-  clientSecret: ${CLIENT_SECRET}
-  scopes:
-    - read:contacts
-    - write:contacts
-```
-
-2. **API Key Authentication**:
-```yaml
-authentication:
-  type: api_key
-  apiKey: ${API_KEY}
-  headerName: X-API-Key  # Optional, default varies by provider
-```
-
-3. **Basic Authentication**:
-```yaml
-authentication:
-  type: basic
-  username: ${USERNAME}
-  password: ${PASSWORD}
-```
-
-4. **JWT Authentication**:
-```yaml
-authentication:
-  type: jwt
-  privateKey: ${PRIVATE_KEY}
-  issuer: ${ISSUER}
-  subject: ${SUBJECT}
-```
-
-### Authentication Considerations:
-
-- Each provider may support different authentication methods.
-- It's recommended to use environment variables (`${VAR_NAME}`) for sensitive credentials rather than hardcoding them.
-- Scopes should be as restrictive as possible, requesting only the permissions your integration needs.
-- Some providers require specific configuration in their developer portals to enable OAuth2 authentication.
 
 ## Read Configuration
 
@@ -351,7 +280,6 @@ The `write` section defines what data can be written to the provider. This secti
 write:
   objects:
     - objectName: contact
-    - objectName: lead
       inheritMapping: true
 ```
 
@@ -379,96 +307,75 @@ The `subscribe` section defines how to subscribe to events from the provider. Th
 
 ```yaml
 subscribe:
-  events:
-    - eventType: contact.created
-      destination: contactCreatedWebhook
-    - eventType: contact.updated
-      destination: contactUpdatedWebhook
-      filter:
-        conditions:
-          - field: email
-            operator: contains
-            value: example.com
+  objects:
+    - objectName: account
+      destination: accountWebhook
+      createEvent:
+        enabled: always
+      updateEvent:
+        enabled: always
+        watchFieldsAuto: all  # Alternatively, use requiredWatchFields
+      deleteEvent:
+        enabled: always
 ```
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `events` | Array | Yes | An array of events to subscribe to. Each element defines a specific event type to subscribe to. |
+| `objects` | Array | Yes | An array of objects to subscribe to. Each element defines a specific object type to receive events for. |
+
+### Subscribe Object Configuration
+
+Each object in the `objects` array defines a specific object type to subscribe to:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `objectName` | String | Yes | The name of the object to subscribe to. Must match an object type supported by the provider. Case-sensitive. |
+| `destination` | String | Yes | The webhook destination for the event data. This determines where the event data will be sent. Must match a webhook configured in your Ampersand account. |
+| `inheritFieldsAndMapping` | Boolean | Yes | Whether to inherit field mappings from read configuration. For Salesforce, this must be set to `true`. |
+| `createEvent` | Object | No | Configuration for create events. |
+| `updateEvent` | Object | No | Configuration for update events. |
+| `deleteEvent` | Object | No | Configuration for delete events. |
 
 ### Event Configuration
 
-Each event in the `events` array defines a specific event type to subscribe to:
+Each event type can be configured with specific options:
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `eventType` | String | Yes | The type of event to subscribe to. Must match an event type supported by the provider. Case-sensitive. |
-| `destination` | String | Yes | The webhook destination for the event data. This determines where the event data will be sent. Must match a webhook configured in your Ampersand account. |
-| `filter` | Object | No | An optional filter to apply to the events. Only events that match the filter will be processed. |
-| `transform` | Object | No | An optional transformation to apply to the event data before sending it to the destination. |
-
-#### Event Types
-
-The `eventType` must match an event type supported by the provider. Common event types include:
-
-- Salesforce: `Account.created`, `Contact.updated`, `Lead.deleted`
-- HubSpot: `contact.propertyChange`, `deal.creation`, `company.deletion`
-- GitHub: `push`, `pull_request`, `issue_comment`
-- Stripe: `customer.created`, `invoice.paid`, `subscription.updated`
-
-### Filtering and Transformation
-
-The `filter` section allows you to filter events based on certain conditions:
-
+1. **Create Event Configuration**:
 ```yaml
-filter:
-  conditions:
-    - field: email
-      operator: contains
-      value: example.com
-    - field: status
-      operator: equals
-      value: active
-  operator: and  # Optional, default: and
+createEvent:
+  enabled: always
 ```
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `conditions` | Array | Yes | An array of conditions to filter by. Each condition checks a field against a value using an operator. |
-| `operator` | String | No | How to combine the conditions. Values: `and` (all conditions must match), `or` (any condition can match). Default: `and`. |
-
-Condition operators include:
-- `equals`: Field equals the value
-- `not_equals`: Field does not equal the value
-- `contains`: Field contains the value
-- `not_contains`: Field does not contain the value
-- `starts_with`: Field starts with the value
-- `ends_with`: Field ends with the value
-- `greater_than`: Field is greater than the value
-- `less_than`: Field is less than the value
-
-The `transform` section allows you to transform the event data before sending it to the destination:
-
+2. **Update Event Configuration**:
 ```yaml
-transform:
-  mappings:
-    - source: user.email
-      target: email
-    - source: user.name
-      target: full_name
-  includeOriginal: false  # Optional, default: true
+updateEvent:
+  enabled: always
+  watchFieldsAuto: all  # Watch all fields for changes
 ```
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `mappings` | Array | Yes | An array of field mappings for the transformation. |
-| `includeOriginal` | Boolean | No | Whether to include the original event data in the transformed output. Default: `true`. |
+Alternatively:
+```yaml
+updateEvent:
+  enabled: always
+  requiredWatchFields:  # Watch specific fields
+    - name
+    - email
+    - phone
+```
+
+3. **Delete Event Configuration**:
+```yaml
+deleteEvent:
+  enabled: always
+```
 
 #### Subscribe Considerations:
 
-- Not all providers support event subscriptions.
-- Some providers require webhook endpoints to be configured in their developer portals.
-- Event subscriptions may have different authentication requirements than read/write operations.
-- Filtering events can help reduce the volume of data processed and improve performance.
+- Currently, subscribe actions are only supported for Salesforce and HubSpot.
+- For Salesforce, an admin needs to install the integration.
+- You must also have a read action specified for the object you wish to subscribe to.
+- The `inheritFieldsAndMapping` field must be set to `true` for Salesforce.
+- Only one of `requiredWatchFields` or `watchFieldsAuto` should be provided for update events.
 
 ## Proxy Configuration
 
@@ -792,81 +699,82 @@ Different providers have different API structures, limitations, and best practic
 
 ## Examples
 
-### Minimal Example
+### Read Action Example
 
 ```yaml
 specVersion: 1.0.0
 integrations:
-  - name: simple-integration
+  - name: salesforce-read
     provider: salesforce
     read:
       objects:
-        - objectName: Contact
-          destination: defaultWebhook
+        - objectName: contact
+          destination: contactWebhook
           schedule: "*/30 * * * *"
           requiredFields:
-            - fieldName: FirstName
-            - fieldName: LastName
-            - fieldName: Email
-    write:
-      objects:
-        - objectName: Contact
-    proxy:
-      enabled: true
+            - fieldName: firstname
+            - fieldName: lastname
+            - fieldName: email
+          optionalFields:
+            - fieldName: phone
+          backfill:
+            defaultPeriod:
+              days: 30
 ```
 
-### Complete Example with Subscribe
+### Write Action Example
 
 ```yaml
 specVersion: 1.0.0
 integrations:
-  - name: salesforce-contacts
-    displayName: Salesforce Contacts Integration
+  - name: salesforce-write
     provider: salesforce
-    authentication:
-      type: oauth2
-      clientId: ${SALESFORCE_CLIENT_ID}
-      clientSecret: ${SALESFORCE_CLIENT_SECRET}
-      scopes:
-        - api
-        - refresh_token
-    read:
+    write:
       objects:
-        - objectName: Contact
-          mapToName: contact
-          mapToDisplayName: Contact
-          destination: salesforceWebhook
-          schedule: "*/30 * * * *"
+        - objectName: contact
+          inheritMapping: true
+```
+
+### Subscribe Action Example
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforce-subscribe
+    provider: salesforce
+    subscribe:
+      objects:
+        - objectName: account
+          destination: accountWebhook
+          inheritFieldsAndMapping: true
+          createEvent:
+            enabled: always
+          updateEvent:
+            enabled: always
+            watchFieldsAuto: all
+          deleteEvent:
+            enabled: always
+    read:  # Required for subscribe actions
+      objects:
+        - objectName: account
+          destination: accountWebhook
           requiredFields:
-            - fieldName: FirstName
-              mapToName: first_name
-            - fieldName: LastName
-              mapToName: last_name
-            - fieldName: Email
-              mapToName: email
-          optionalFields:
-            - fieldName: Phone
-              mapToName: phone
-            - fieldName: Title
-              mapToName: job_title
+            - fieldName: id
+            - fieldName: name
+            - fieldName: billingcity
+              mapToName: city
           backfill:
             defaultPeriod:
               fullHistory: true
-    write:
-      objects:
-        - objectName: Contact
-          inheritMapping: true
-    subscribe:
-      events:
-        - eventType: Contact.created
-          destination: contactCreatedWebhook
-        - eventType: Contact.updated
-          destination: contactUpdatedWebhook
-          filter:
-            conditions:
-              - field: Email
-                operator: contains
-                value: example.com
+```
+
+### Proxy Action Example
+
+```yaml
+specVersion: 1.0.0
+integrations:
+  - name: salesforce-proxy
+    provider: salesforce
     proxy:
       enabled: true
 ```

@@ -97,18 +97,6 @@
             "stripe"
           ]
         },
-        "module": {
-          "type": "string",
-          "description": "An optional module within the provider. Some providers have multiple modules or services that can be targeted separately.",
-          "examples": [
-            "crm",
-            "jira"
-          ]
-        },
-        "authentication": {
-          "$ref": "#/definitions/authentication",
-          "description": "Authentication configuration for connecting to the provider's API."
-        },
         "read": {
           "$ref": "#/definitions/read",
           "description": "Configuration for reading data from the provider."
@@ -187,130 +175,6 @@
           "proxy": {
             "enabled": true
           }
-        }
-      ]
-    },
-    "authentication": {
-      "type": "object",
-      "description": "Authentication configuration for the integration. Different providers support different authentication methods.",
-      "required": [
-        "type"
-      ],
-      "properties": {
-        "type": {
-          "type": "string",
-          "description": "The authentication type. The required fields vary based on the authentication type.",
-          "enum": [
-            "oauth2",
-            "api_key",
-            "basic",
-            "jwt"
-          ],
-          "examples": [
-            "oauth2"
-          ]
-        },
-        "clientId": {
-          "type": "string",
-          "description": "For OAuth2 authentication, the client ID provided by the service provider. You can use environment variables with ${VAR_NAME} syntax.",
-          "examples": [
-            "${SALESFORCE_CLIENT_ID}",
-            "3MVG9QDx8IX8nP5T2Ha8ofvlmRcMZ7n0L4pQus1qr9"
-          ]
-        },
-        "clientSecret": {
-          "type": "string",
-          "description": "For OAuth2 authentication, the client secret provided by the service provider. You can use environment variables with ${VAR_NAME} syntax.",
-          "examples": [
-            "${SALESFORCE_CLIENT_SECRET}",
-            "74B39E8C1B6481"
-          ]
-        },
-        "scopes": {
-          "type": "array",
-          "description": "For OAuth2 authentication, the list of scopes to request. These determine what permissions your integration will have.",
-          "items": {
-            "type": "string"
-          },
-          "examples": [
-            [
-              "api",
-              "refresh_token",
-              "read:contacts",
-              "write:contacts"
-            ]
-          ]
-        },
-        "apiKey": {
-          "type": "string",
-          "description": "For API key authentication, the API key. You can use environment variables with ${VAR_NAME} syntax.",
-          "examples": [
-            "${API_KEY}",
-            "sk_test_xxxxxxx"
-          ]
-        },
-        "headerName": {
-          "type": "string",
-          "description": "For API key authentication, the header name for the API key. Different providers may use different header names.",
-          "examples": [
-            "X-API-Key",
-            "Authorization"
-          ]
-        },
-        "username": {
-          "type": "string",
-          "description": "For basic authentication, the username. You can use environment variables with ${VAR_NAME} syntax.",
-          "examples": [
-            "${USERNAME}",
-            "api_user@example.com"
-          ]
-        },
-        "password": {
-          "type": "string",
-          "description": "For basic authentication, the password. You can use environment variables with ${VAR_NAME} syntax.",
-          "examples": [
-            "${PASSWORD}",
-            "api_password_123"
-          ]
-        },
-        "privateKey": {
-          "type": "string",
-          "description": "For JWT authentication, the private key. You can use environment variables with ${VAR_NAME} syntax.",
-          "examples": [
-            "${PRIVATE_KEY}"
-          ]
-        },
-        "issuer": {
-          "type": "string",
-          "description": "For JWT authentication, the issuer. This identifies who created and signed the token.",
-          "examples": [
-            "${ISSUER}",
-            "your-app-name"
-          ]
-        },
-        "subject": {
-          "type": "string",
-          "description": "For JWT authentication, the subject. This identifies the user or system the token represents.",
-          "examples": [
-            "${SUBJECT}",
-            "user@example.com"
-          ]
-        }
-      },
-      "examples": [
-        {
-          "type": "oauth2",
-          "clientId": "${SALESFORCE_CLIENT_ID}",
-          "clientSecret": "${SALESFORCE_CLIENT_SECRET}",
-          "scopes": [
-            "api",
-            "refresh_token"
-          ]
-        },
-        {
-          "type": "api_key",
-          "apiKey": "${STRIPE_API_KEY}",
-          "headerName": "Authorization"
         }
       ]
     },
@@ -525,6 +389,16 @@
                     true,
                     false
                   ]
+                },
+                "days": {
+                  "type": "integer",
+                  "description": "Number of days in past to backfill from. 0 is no backfill. e.g) if 10, then backfill last 10 days of data.",
+                  "minimum": 0,
+                  "examples": [
+                    30,
+                    60,
+                    90
+                  ]
                 }
               }
             }
@@ -534,6 +408,47 @@
               "defaultPeriod": {
                 "fullHistory": true
               }
+            },
+            {
+              "defaultPeriod": {
+                "days": 30
+              }
+            }
+          ]
+        },
+        "delivery": {
+          "type": "object",
+          "description": "Configuration for how data is delivered to the destination.",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "description": "The delivery mode. 'auto' delivers data as soon as it's read, 'onRequest' stores data until explicitly requested.",
+              "enum": [
+                "auto",
+                "onRequest"
+              ],
+              "default": "auto",
+              "examples": [
+                "auto",
+                "onRequest"
+              ]
+            },
+            "pageSize": {
+              "type": "integer",
+              "description": "The number of records to deliver per page when using onRequest mode.",
+              "minimum": 50,
+              "maximum": 500,
+              "examples": [
+                50,
+                100,
+                200
+              ]
+            }
+          },
+          "examples": [
+            {
+              "mode": "onRequest",
+              "pageSize": 100
             }
           ]
         }
@@ -789,34 +704,32 @@
     },
     "subscribe": {
       "type": "object",
-      "description": "Configuration for subscribing to events from the provider. Defines what events to listen for.",
+      "description": "Configuration for subscribing to events from the provider. Defines what objects to subscribe to for events.",
       "required": [
-        "events"
+        "objects"
       ],
       "properties": {
-        "events": {
+        "objects": {
           "type": "array",
-          "description": "List of events to subscribe to. Each event represents a specific action or change to monitor.",
+          "description": "List of objects to subscribe to. Each object represents a specific data type to receive events for.",
           "items": {
-            "$ref": "#/definitions/event"
+            "$ref": "#/definitions/subscribeObject"
           },
           "examples": [
             [
               {
-                "eventType": "contact.created",
-                "destination": "contactCreatedWebhook"
-              },
-              {
-                "eventType": "contact.updated",
-                "destination": "contactUpdatedWebhook",
-                "filter": {
-                  "conditions": [
-                    {
-                      "field": "email",
-                      "operator": "contains",
-                      "value": "example.com"
-                    }
-                  ]
+                "objectName": "account",
+                "destination": "accountWebhook",
+                "inheritFieldsAndMapping": true,
+                "createEvent": {
+                  "enabled": "always"
+                },
+                "updateEvent": {
+                  "enabled": "always",
+                  "watchFieldsAuto": "all"
+                },
+                "deleteEvent": {
+                  "enabled": "always"
                 }
               }
             ]
@@ -825,252 +738,191 @@
       },
       "examples": [
         {
-          "events": [
+          "objects": [
             {
-              "eventType": "contact.created",
-              "destination": "contactCreatedWebhook"
-            },
-            {
-              "eventType": "contact.updated",
-              "destination": "contactUpdatedWebhook",
-              "filter": {
-                "conditions": [
-                  {
-                    "field": "email",
-                    "operator": "contains",
-                    "value": "example.com"
-                  }
-                ]
+              "objectName": "account",
+              "destination": "accountWebhook",
+              "inheritFieldsAndMapping": true,
+              "createEvent": {
+                "enabled": "always"
+              },
+              "updateEvent": {
+                "enabled": "always",
+                "watchFieldsAuto": "all"
+              },
+              "deleteEvent": {
+                "enabled": "always"
               }
             }
           ]
         }
       ]
     },
-    "event": {
+    "subscribeObject": {
       "type": "object",
-      "description": "Configuration for a specific event to subscribe to. Defines what event to listen for and how to handle it.",
+      "description": "Configuration for a specific object to subscribe to. Defines what events to listen for on this object.",
       "required": [
-        "eventType",
-        "destination"
+        "objectName",
+        "destination",
+        "inheritFieldsAndMapping"
       ],
       "properties": {
-        "eventType": {
+        "objectName": {
           "type": "string",
-          "description": "The type of event to subscribe to. Must match an event type supported by the provider.",
+          "description": "The name of the object to subscribe to in the provider's API. Must match an object type supported by the provider.",
           "examples": [
-            "contact.created",
-            "lead.updated",
-            "deal.closed",
-            "account.deleted"
+            "account",
+            "contact",
+            "lead",
+            "opportunity"
           ]
         },
         "destination": {
           "type": "string",
-          "description": "The webhook destination for the event data. This determines where the event data will be sent when the event occurs.",
+          "description": "The webhook destination for the event data. This determines where the event data will be sent when an event occurs.",
           "examples": [
-            "contactCreatedWebhook",
-            "defaultWebhook",
-            "customEventWebhook"
+            "accountWebhook",
+            "contactWebhook",
+            "defaultWebhook"
           ]
         },
-        "filter": {
+        "inheritFieldsAndMapping": {
+          "type": "boolean",
+          "description": "Whether to inherit field mappings from read configuration. For Salesforce, this must be set to true.",
+          "examples": [
+            true
+          ]
+        },
+        "createEvent": {
           "type": "object",
-          "description": "Filter to apply to events. Only events that match the filter will be processed. Useful for reducing the volume of events.",
-          "required": [
-            "conditions"
-          ],
+          "description": "Configuration for create events. Triggers when a new record is created.",
           "properties": {
-            "conditions": {
-              "type": "array",
-              "description": "Conditions to filter by. Each condition checks a field against a value using an operator.",
-              "items": {
-                "type": "object",
-                "required": [
-                  "field",
-                  "operator",
-                  "value"
-                ],
-                "properties": {
-                  "field": {
-                    "type": "string",
-                    "description": "The field to filter on. Must be a field present in the event data.",
-                    "examples": [
-                      "email",
-                      "status",
-                      "amount",
-                      "country"
-                    ]
-                  },
-                  "operator": {
-                    "type": "string",
-                    "description": "The operator to use for comparison. Determines how the field is compared to the value.",
-                    "enum": [
-                      "equals",
-                      "not_equals",
-                      "contains",
-                      "not_contains",
-                      "starts_with",
-                      "ends_with",
-                      "greater_than",
-                      "less_than"
-                    ],
-                    "examples": [
-                      "equals",
-                      "contains",
-                      "greater_than"
-                    ]
-                  },
-                  "value": {
-                    "description": "The value to compare against. The type should match what's expected for the field.",
-                    "type": [
-                      "string",
-                      "number",
-                      "boolean"
-                    ],
-                    "examples": [
-                      "example.com",
-                      1000,
-                      true
-                    ]
-                  }
-                }
-              },
-              "examples": [
-                [
-                  {
-                    "field": "email",
-                    "operator": "contains",
-                    "value": "example.com"
-                  },
-                  {
-                    "field": "status",
-                    "operator": "equals",
-                    "value": "active"
-                  }
-                ]
-              ]
-            },
-            "operator": {
+            "enabled": {
               "type": "string",
-              "description": "How to combine the conditions. 'and' requires all conditions to match, while 'or' requires any condition to match.",
+              "description": "Whether create events are enabled. 'always' means they are always enabled.",
               "enum": [
-                "and",
-                "or"
+                "always"
               ],
-              "default": "and",
               "examples": [
-                "and",
-                "or"
+                "always"
               ]
             }
           },
           "examples": [
             {
-              "conditions": [
-                {
-                  "field": "email",
-                  "operator": "contains",
-                  "value": "example.com"
-                }
-              ],
-              "operator": "and"
+              "enabled": "always"
             }
           ]
         },
-        "transform": {
+        "updateEvent": {
           "type": "object",
-          "description": "Transformation to apply to event data before sending it to the destination. Allows you to reshape the data.",
-          "required": [
-            "mappings"
-          ],
+          "description": "Configuration for update events. Triggers when an existing record is modified.",
           "properties": {
-            "mappings": {
+            "enabled": {
+              "type": "string",
+              "description": "Whether update events are enabled. 'always' means they are always enabled.",
+              "enum": [
+                "always"
+              ],
+              "examples": [
+                "always"
+              ]
+            },
+            "watchFieldsAuto": {
+              "type": "string",
+              "description": "Whether to automatically watch all fields for changes. 'all' watches all fields.",
+              "enum": [
+                "all"
+              ],
+              "examples": [
+                "all"
+              ]
+            },
+            "requiredWatchFields": {
               "type": "array",
-              "description": "Field mappings for the transformation. Each mapping defines how to map a field from the source to the target.",
+              "description": "List of specific fields to watch for changes. Only events affecting these fields will trigger notifications.",
               "items": {
-                "type": "object",
-                "required": [
-                  "source",
-                  "target"
-                ],
-                "properties": {
-                  "source": {
-                    "type": "string",
-                    "description": "The source field path in the event data. Can use dot notation for nested fields.",
-                    "examples": [
-                      "user.email",
-                      "contact.name",
-                      "data.amount"
-                    ]
-                  },
-                  "target": {
-                    "type": "string",
-                    "description": "The target field name in the transformed output. The resulting data will have this field name.",
-                    "examples": [
-                      "email",
-                      "full_name",
-                      "deal_amount"
-                    ]
-                  }
-                }
+                "type": "string"
               },
               "examples": [
                 [
-                  {
-                    "source": "user.email",
-                    "target": "email"
-                  },
-                  {
-                    "source": "user.name",
-                    "target": "full_name"
-                  }
+                  "name",
+                  "email",
+                  "phone"
                 ]
-              ]
-            },
-            "includeOriginal": {
-              "type": "boolean",
-              "description": "Whether to include the original event data in the transformed output. If true, both original and transformed data will be included.",
-              "default": true,
-              "examples": [
-                true,
-                false
               ]
             }
           },
           "examples": [
             {
-              "mappings": [
-                {
-                  "source": "user.email",
-                  "target": "email"
-                },
-                {
-                  "source": "user.name",
-                  "target": "full_name"
-                }
+              "enabled": "always",
+              "watchFieldsAuto": "all"
+            },
+            {
+              "enabled": "always",
+              "requiredWatchFields": [
+                "name",
+                "email",
+                "phone"
+              ]
+            }
+          ]
+        },
+        "deleteEvent": {
+          "type": "object",
+          "description": "Configuration for delete events. Triggers when a record is removed.",
+          "properties": {
+            "enabled": {
+              "type": "string",
+              "description": "Whether delete events are enabled. 'always' means they are always enabled.",
+              "enum": [
+                "always"
               ],
-              "includeOriginal": false
+              "examples": [
+                "always"
+              ]
+            }
+          },
+          "examples": [
+            {
+              "enabled": "always"
             }
           ]
         }
       },
       "examples": [
         {
-          "eventType": "contact.created",
-          "destination": "contactCreatedWebhook"
+          "objectName": "account",
+          "destination": "accountWebhook",
+          "inheritFieldsAndMapping": true,
+          "createEvent": {
+            "enabled": "always"
+          },
+          "updateEvent": {
+            "enabled": "always",
+            "watchFieldsAuto": "all"
+          },
+          "deleteEvent": {
+            "enabled": "always"
+          }
         },
         {
-          "eventType": "contact.updated",
-          "destination": "contactUpdatedWebhook",
-          "filter": {
-            "conditions": [
-              {
-                "field": "email",
-                "operator": "contains",
-                "value": "example.com"
-              }
+          "objectName": "contact",
+          "destination": "contactWebhook",
+          "inheritFieldsAndMapping": true,
+          "createEvent": {
+            "enabled": "always"
+          },
+          "updateEvent": {
+            "enabled": "always",
+            "requiredWatchFields": [
+              "name",
+              "email",
+              "phone"
             ]
+          },
+          "deleteEvent": {
+            "enabled": "always"
           }
         }
       ]
