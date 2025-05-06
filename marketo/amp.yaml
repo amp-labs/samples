@@ -4,8 +4,6 @@ integrations:
     provider: marketo
     read:
       objects:
-        # More fields can be seen here
-        # https://developer.adobe.com/marketo-apis/api/mapi/#operation/getLeadsByFilterUsingGET
         - objectName: leads
           destination: marketoWebhook
           schedule: "0 */6 * * *" # every 6 hours
@@ -16,6 +14,21 @@ integrations:
             - fieldName: email
           optionalFields:
             - fieldName: address
+
+        # More fields can be seen here
+        # https://developer.adobe.com/marketo-apis/api/mapi/#tag/Activities/operation/getLeadActivitiesUsingGET
+        - objectName: activities
+          destination: marketoWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: leadId
+            - fieldName: marketoGUID
+            - fieldName: activityTypeId
+          optionalFieldsAuto: all
 
         # More fields can be seen here
         # https://developer.adobe.com/marketo-apis/api/mapi/#operation/getCampaignsUsingGET
