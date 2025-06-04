@@ -42,7 +42,7 @@ integrations:
           # All other fields in a Lead are optional,
           # Customers can pick from all of them.
           optionalFieldsAuto: all
-      write:
-        objects:
-          # Create a new lead in Salesforce whenever we make an API request.
-          - objectName: lead
+    write:
+      objects:
+        # Create a new lead in Salesforce whenever we make an API request.
+        - objectName: lead
