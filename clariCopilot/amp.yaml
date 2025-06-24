@@ -1,0 +1,36 @@
+specVersion: 1.0.0
+integrations:
+  - name: readClariCopilot
+    displayName: Clari Copilot Read
+    provider: clariCopilot
+    read:
+      objects:
+        - objectName: calls
+          destination: clariCopilotWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://api-doc.copilot.clari.com/#tag/call/paths/~1calls/get
+          requiredFields:
+            - fieldName: id
+            - fieldName: source_id
+            - fieldName: title
+          optionalFields:
+            - fieldName: bot_not_join_reason
+            - fieldName: type
+            - fieldName: time
+            - fieldName: disposition
+            - fieldName: metrics
+            - fieldName: call_review_page_url
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+      
+        - objectName: users
+          destination: clariCopilotWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://api-doc.copilot.clari.com/#tag/user/paths/~1users/get
+          requiredFields:
+            - fieldName: id
+            - fieldName: email
+          optionalFieldsAuto: all   
+    proxy:
+      enabled: true
