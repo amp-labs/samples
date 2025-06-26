@@ -1,6 +1,6 @@
 specVersion: 1.0.0
 integrations:
-  - name: readClariCopilot
+  - name: readAndWriteClariCopilot
     displayName: Clari Copilot Read
     provider: clariCopilot
     read:
@@ -32,5 +32,12 @@ integrations:
             - fieldName: id
             - fieldName: email
           optionalFieldsAuto: all   
+    write:
+      objects:
+        - objectName: accounts
+        - objectName: calls
+        - objectName: contacts
+        - objectName: deals
+
     proxy:
       enabled: true
