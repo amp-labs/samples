@@ -1,5 +1,3 @@
-# This is the config file from the Quickstart tutorial at https://docs.withampersand.com/docs/quickstart.
-
 specVersion: 1.0.0
 integrations:
   - name: readAndWritePinterest
