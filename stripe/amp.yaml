@@ -34,6 +34,15 @@ integrations:
             - fieldName: name
           optionalFieldsAuto: all
 
+        - objectName: climate/suppliers
+          destination: stripeWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://docs.stripe.com/api/climate/supplier/object
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
     write:
       objects:
         - objectName: customers
