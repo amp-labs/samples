@@ -21,7 +21,26 @@ integrations:
               prompt: What field do you use to track the date of the transaction?
           optionalFieldsAuto: all
 
+        - objectName: vendorBill
+          destination: netsuiteWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: billCity
+            - fieldName: currency
+            - fieldName: dueDate
+              mapToName: duedate
+            - fieldName: exchangeRate
+              mapToName: exchangerate
+            - mapToName: description
+              mapToDisplayName: Description
+              prompt: What field do you use to track the description of the bill?
+          optionalFieldsAuto: all
+
     write:
       objects:
         - objectName: journalEntry
+          inheritMapping: true
+
+        - objectName: vendorBill
           inheritMapping: true
