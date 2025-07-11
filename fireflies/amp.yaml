@@ -40,9 +40,9 @@ integrations:
 
     write:
       objects:
-        - objectName: liveMeetings
-        - objectName: bites
-        - objectName: meetingTitle
+        - objectName: liveMeetings # Supported operation: create.
+        - objectName: bites # Supported operation: create.
+        - objectName: meetingTitle # Supported operation: update.
 
     proxy:
       enabled: true
