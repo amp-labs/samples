@@ -1,0 +1,34 @@
+specVersion: 1.0.0
+integrations:
+  - name: mixmax-integration
+    provider: mixmax
+    read:
+      objects:
+        # More fields can be seen here
+        # https://developer.mixmax.com/reference/insightsreports
+        - objectName: insightsreports
+          destination: mixmaxWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: _id
+            - fieldName: userId
+            - fieldName: query
+            - fieldName: title
+          optionalFields:
+            - fieldName: shared
+
+        # More fields can be seen here
+        # https://developer.mixmax.com/reference/sequences
+        - objectName: sequences
+          destination: mixmaxWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: _id
+            - fieldName: stages
+            - fieldName: name
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: insightsreports
+        - objectName: messages
