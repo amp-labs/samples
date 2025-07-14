@@ -1,0 +1,36 @@
+specVersion: 1.0.0
+integrations:
+  - name: dixa-integration
+    provider: dixa
+    read:
+      objects:
+        # More fields can be seen here
+        # https://docs.dixa.io/openapi/dixa-api/v1/tag/Agents/#tag/Agents/operation/getAgents
+        - objectName: agents
+          destination: dixaWebhook
+          schedule: "*/10 * * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: email
+            - fieldName: phoneNumber
+            - fieldName: roles
+          optionalFields:
+            - fieldName: additionalPhoneNumbers
+
+        # More fields can be seen here
+        # https://docs.dixa.io/openapi/dixa-api/v1/tag/Queues/#tag/Queues/operation/getQueues
+        - objectName: queues
+          destination: dixaWebhook
+          schedule: "*/10 * * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: slaCalculationMethod
+            - fieldName: usages
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: webhooks
+        - objectName: queues
+        - objectName: agents
