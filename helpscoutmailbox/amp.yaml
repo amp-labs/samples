@@ -1,0 +1,48 @@
+specVersion: 1.0.0
+integrations:
+  - name: helpscoutmailbox-integration
+    provider: helpScoutMailbox
+    read:
+      objects:
+        # More fields can be seen here
+        # https://developer.helpscout.com/mailbox-api/endpoints/conversations/list/
+        - objectName: conversations
+          destination: helpScoutWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: number
+            - fieldName: status
+            - fieldName: assignee
+          optionalFields:
+            - fieldName: customerWaitingSince
+
+        # More fields can be seen here
+        # https://developer.helpscout.com/mailbox-api/endpoints/customers/list/
+        - objectName: customers
+          destination: helpScoutWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: firstName
+            - fieldName: lastName
+            - fieldName: jobTitle
+          optionalFieldsAuto: all
+
+        # More fields can be seen here
+        # https://developer.helpscout.com/mailbox-api/endpoints/inboxes/list/
+        - objectName: mailboxes
+          destination: helpScoutWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: slug
+            - fieldName: email
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: conversations
+        - objectName: customers
+        - objectName: webhook
