@@ -1,0 +1,31 @@
+specVersion: 1.0.0
+integrations:
+  - name: front-integration
+    provider: front
+    read:
+      objects:
+        - objectName: channels
+          destination: frontWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: address
+            - fieldName: is_private
+          optionalFields:
+            - fieldName: type
+
+        - objectName: contacts
+          destination: frontWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: handles
+            - fieldName: links
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: message_templates
