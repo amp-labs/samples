@@ -1,0 +1,37 @@
+specVersion: 1.0.0
+integrations:
+  - name: chilipiper-integration
+    provider: chilipiper
+    read:
+      objects:
+        # More fields can be seen here
+        # https://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/List%20all%20distributions
+        - objectName: distribution
+          destination: chilipiperWebhook
+          schedule: "*/10 * * * *" # every 6 hours
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: published
+          optionalFieldsAuto: all
+
+        # More fields can be seen here
+        # https://developers.freshdesk.com/api/#contactshttps://fire.chilipiper.com/api/fire-edge/public/org/docs/index.html#operation/Read%20all%20teams
+        - objectName: team
+          destination: chilipiperWebhook
+          schedule: "*/10 * * * *" # every 6 hours
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: distribution
+        - objectName: workspace/users/add
+        - objectName: team/users/add
