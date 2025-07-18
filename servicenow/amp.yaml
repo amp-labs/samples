@@ -1,6 +1,6 @@
 specVersion: 1.0.0
 integrations:
-  - name: servicenow-integration
+  - name: serviceNow-integration
     provider: serviceNow
     read:
       objects:
