@@ -1,0 +1,45 @@
+specVersion: 1.0.0
+integrations:
+  - name: gorgias-integration
+    provider: gorgias
+    read:
+      objects:
+        # More fields can be seen here
+        # https://developers.gorgias.com/reference/list-tickets
+        - objectName: tickets
+          destination: gorgiasWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: uri
+            - fieldName: customer
+          optionalFieldsAuto: all
+
+        # More fields can be seen here
+        # https://developers.gorgias.com/reference/list-users
+        - objectName: users
+          destination: gorgiasWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: active
+            - fieldName: bio
+          optionalFieldsAuto: all
+
+        # More fields can be seen here
+        # https://developers.gorgias.com/reference/list-customers
+        - objectName: customers
+          destination: gorgiasWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: active
+            - fieldName: id
+            - fieldName: email
+            - fieldName: name
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: tickets
+        - objectName: customers
+        - objectName: integrations
