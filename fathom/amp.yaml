@@ -1,0 +1,51 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteFathom
+    displayName: Fathom read and write
+    provider: fathom
+    read:
+      objects:
+        - objectName: meetings
+          destination: fathomWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://docs.fathom.ai/api-reference/meetings/list-meetings
+          requiredFields:
+            - fieldName: title
+            - fieldName: meeting_title
+            - fieldName: created_at
+          optionalFields:
+            - fieldName: transcript_language
+            - fieldName: transcript
+            - fieldName: meeting_type
+            - fieldName: scheduled_end_time
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+      
+        - objectName: teams
+          destination: fathomWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://docs.fathom.ai/api-reference/teams/list-teams
+          requiredFields:
+            - fieldName: name
+            - fieldName: created_at
+          optionalFieldsAuto: all   
+
+
+
+        - objectName: team_members
+          destination: fathomWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://docs.fathom.ai/api-reference/team-members/list-team-members
+          requiredFields:
+            - fieldName: name
+            - fieldName: email
+          optionalFieldsAuto: all   
+
+
+    write:
+      objects:
+        - objectName: webhooks
+
+    proxy:
+      enabled: true
