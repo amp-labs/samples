@@ -1,0 +1,41 @@
+specVersion: 1.0.0
+integrations:
+  - name: freshdesk-integration
+    provider: freshdesk
+    read:
+      objects:
+        # More fields can be seen here
+        # https://developers.freshdesk.com/api/#list_all_tickets
+        - objectName: tickets
+          destination: freshdeskWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: sentiment_score
+            - fieldName: priority
+            - fieldName: source
+          optionalFields:
+            - fieldName: subject
+
+        # More fields can be seen here
+        # https://developers.freshdesk.com/api/#contacts
+        - objectName: contacts
+          destination: freshdeskWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: name
+            - fieldName: id
+            - fieldName: phone
+            - fieldName: email
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: agents
