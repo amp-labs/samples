@@ -35,17 +35,6 @@ integrations:
             - fieldName: title
           optionalFieldsAuto: all
 
-          # Ref: https://docs.gitlab.com/api/namespaces
-        - objectName: namespaces
-          destination: gitlabWebhook
-          schedule: "*/10 * * * *" # schedule reads every 10 Minutes
-          requiredFields:
-            - fieldName: id
-            - fieldName: name
-            - fieldName: path
-            - fieldName: web_url
-          optionalFieldsAuto: all
-
     write:
       objects:
         - objectName: projects
