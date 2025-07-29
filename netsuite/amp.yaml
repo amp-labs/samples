@@ -1,8 +1,16 @@
 specVersion: 1.0.0
 integrations:
-  - name: readWriteNetsuite
+  - name: writeNetsuite
     provider: netsuite
-    module: restlet
+    module: restapi
+    write:
+      objects:
+        - objectName: journalEntry
+          inheritMapping: true
+
+  - name: readNetsuite
+    provider: netsuite
+    module: suiteql
     read:
       objects:
         - objectName: transaction
@@ -17,8 +25,3 @@ integrations:
               mapToDisplayName: Location
               prompt: What field do you use to track the location associated with the transaction?
           optionalFieldsAuto: all
-
-    write:
-      objects:
-        - objectName: transaction
-          inheritMapping: true
