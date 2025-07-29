@@ -1,0 +1,51 @@
+specVersion: 1.0.0
+integrations:
+  - name: gitlab-integrations
+    provider: gitlab
+    read:
+      objects:
+        # Ref: https://docs.gitlab.com/api/projects
+        - objectName: projects
+          destination: gitlabWebhook
+          schedule: "*/10 * * * *" # schedule reads every 10 Minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: auto_devops_enabled
+            - fieldName: description
+            - fieldName: name
+            - fieldName: path
+          optionalFields:
+            - fieldName: visibility
+
+        # Ref: https://docs.gitlab.com/api/merge_requests
+        - objectName: merge_requests
+          destination: gitlabWebhook
+          schedule: "*/10 * * * *" # schedule reads every 10 Minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: project_id
+            - fieldName: description
+            - fieldName: state
+            - fieldName: title
+          optionalFieldsAuto: all
+
+          # Ref: https://docs.gitlab.com/api/namespaces
+        - objectName: namespaces
+          destination: gitlabWebhook
+          schedule: "*/10 * * * *" # schedule reads every 10 Minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: path
+            - fieldName: web_url
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: projects
