@@ -1,0 +1,55 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteFlatfile
+    displayName: Flatfile read and write
+    provider: flatfile
+    read:
+      objects:
+        - objectName: events
+          destination: flatfileWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://reference.flatfile.com/api-reference/events/list
+          requiredFields:
+            - fieldName: id
+            - fieldName: topic
+            - fieldName: domain
+          optionalFields:
+            - fieldName: context
+            - fieldName: callbackUrl
+            - fieldName: dataUrl
+            - fieldName: origin
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+      
+        - objectName: jobs
+          destination: flatfileWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://reference.flatfile.com/api-reference/jobs/list
+          requiredFields:
+            - fieldName: id
+            - fieldName: mode
+            - fieldName: status
+          optionalFieldsAuto: all   
+
+
+        - objectName: environments
+          destination: flatfileWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://reference.flatfile.com/api-reference/environments/list
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: namespaces
+          optionalFieldsAuto: all   
+
+
+    write:
+      objects:
+        - objectName: apps
+        - objectName: spaces
+        - objectName: jobs
+        - objectName: events
+
+    proxy:
+      enabled: true
