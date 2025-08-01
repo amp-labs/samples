@@ -3,6 +3,20 @@ integrations:
   - name: writeNetsuite
     provider: netsuite
     module: restapi
+    read:
+      objects:
+        - objectName: journalEntry
+          destination: netsuiteWebhook
+          schedule: "*/60 * * * *" 
+          requiredFields:
+            - fieldName: approved
+            - fieldName: currency
+            - fieldName: id
+            - fieldName: tranDate
+            - mapToName: location
+              mapToDisplayName: Location
+              prompt: What field do you use to track the location associated with the entry?
+          optionalFieldsAuto: all
     write:
       objects:
         - objectName: journalEntry
