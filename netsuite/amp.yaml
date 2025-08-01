@@ -1,6 +1,6 @@
 specVersion: 1.0.0
 integrations:
-  - name: writeNetsuite
+  - name: readAndWriteNetsuite
     provider: netsuite
     module: restapi
     read:
