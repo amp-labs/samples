@@ -7,7 +7,7 @@ integrations:
         - objectName: lists
           destination: AttioWebhook
           schedule: "*/10 * * * *"
-          # Field names come from https://developers.attio.com/reference/get_v2-lists
+          # Field names come from https://docs.attio.com/rest-api/endpoint-reference/lists/list-all-lists
           requiredFields:
             - fieldName: id
             - fieldName: api_slug
@@ -17,7 +17,7 @@ integrations:
         - objectName: notes
           destination: AttioWebhook
           schedule: "*/10 * * * *"
-          # Field names come from https://developers.attio.com/reference/get_v2-notes
+          # Field names come from https://docs.attio.com/rest-api/endpoint-reference/notes/list-notes
           requiredFields:
             - fieldName: id
             - fieldName: title
@@ -29,7 +29,7 @@ integrations:
         - objectName: tasks
           destination: AttioWebhook
           schedule: "*/10 * * * *"
-          # Field names come from https://developers.attio.com/reference/get_v2-tasks
+          # Field names come from https://docs.attio.com/rest-api/endpoint-reference/tasks/list-tasks
           requiredFields:
             - fieldName: id
             - fieldName: content_plaintext
