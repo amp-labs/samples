@@ -1,0 +1,45 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteTeamleader
+    displayName: Teamleader read and write
+    provider: teamleader
+    read:
+      objects:
+        - objectName: users
+          destination: teamleaderWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: first_name
+            - fieldName: last_name
+          optionalFields:
+            - fieldName: email
+            - fieldName: language
+            - fieldName: status
+            
+        - objectName: contacts
+          destination: teamleaderWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: status
+            - fieldName: telephones
+          optionalFieldsAuto: all
+
+        - objectName: departments
+          destination: teamleaderWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: vat_number
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: deals
+        - objectName: dealPipelines
+
+    proxy:
+      enabled: true
