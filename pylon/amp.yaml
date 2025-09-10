@@ -1,0 +1,55 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWritePylon
+    displayName: Pylon read and write
+    provider: pylon
+    read:
+      objects:
+        - objectName: accounts
+          destination: pylonWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://docs.usepylon.com/pylon-docs/developer/api/api-reference/accounts
+          requiredFields:
+            - fieldName: id
+            - fieldName: domain
+            - fieldName: name
+          optionalFields:
+            - fieldName: created_at
+            - fieldName: owner
+            - fieldName: tags
+      
+        - objectName: contacts
+          destination: pylonWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://docs.usepylon.com/pylon-docs/developer/api/api-reference/contacts
+          requiredFields:
+            - fieldName: id
+            - fieldName: email
+            - fieldName: name
+          optionalFieldsAuto: all   
+
+
+        - objectName: issues
+          destination: pylonWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://docs.usepylon.com/pylon-docs/developer/api/api-reference/issues
+          requiredFields:
+            - fieldName: account
+            - fieldName: id
+            - fieldName: assignee
+            - fieldName: body_html
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 29
+
+
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: issues
+        - objectName: tasks
+        - objectName: tags
+
+    proxy:
+      enabled: true
