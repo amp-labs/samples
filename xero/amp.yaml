@@ -1,0 +1,54 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteXero
+    displayName: Xero read and write
+    provider: xero
+    read:
+      objects:
+        - objectName: contacts
+          destination: xeroWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.xero.com/documentation/api/accounting/contacts
+          requiredFields:
+            - fieldName: ContactID
+            - fieldName: ContactNumber
+            - fieldName: FirstName
+          optionalFields:
+            - fieldName: AccountNumber
+            - fieldName: ContactStatus
+            - fieldName: EmailAddress
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+      
+        - objectName: purchaseOrders
+          destination: xeroWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.xero.com/documentation/api/accounting/purchaseorders
+          requiredFields:
+            - fieldName: PurchaseOrderID
+            - fieldName: PurchaseOrderNumber
+            - fieldName: FirstName
+          optionalFieldsAuto: all   
+
+
+        - objectName: contactGroups
+          destination: xeroWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.xero.com/documentation/api/accounting/contactgroups
+          requiredFields:
+            - fieldName: Name
+            - fieldName: ContactGroupID
+            - fieldName: Status
+          optionalFieldsAuto: all  
+
+
+    write:
+      objects:
+        - objectName: taxRates
+        - objectName: quotes
+        - objectName: contacts
+        - objectName: purchaseOrders
+
+    proxy:
+      enabled: true
