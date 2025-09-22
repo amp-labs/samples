@@ -8,7 +8,7 @@ integrations:
         # https://developer.lemlist.com/#32ab1bf9-9b2f-40ed-9bbd-0b8370fed3d9
         - objectName: campaigns
           destination: lemlistWebhook
-          schedule: "0 */6 * * *" # every 6 hours
+          schedule: "0 */6 * * *" # every 6 hours, at the top of the hour
           requiredFields:
             - fieldName: _id
             - fieldName: name
