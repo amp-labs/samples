@@ -1,0 +1,34 @@
+specVersion: 1.0.0
+integrations:
+  - name: lemlist-integration
+    provider: lemlist
+    read:
+      objects:
+        # More fields can be seen here
+        # https://developer.lemlist.com/#32ab1bf9-9b2f-40ed-9bbd-0b8370fed3d9
+        - objectName: campaigns
+          destination: lemlistWebhook
+          schedule: "0 */6 * * *" # every 6 hours, at the top of the hour
+          requiredFields:
+            - fieldName: _id
+            - fieldName: name
+            - fieldName: status
+          optionalFieldsAuto: all
+
+        # More fields can be seen here
+        # https://developer.lemlist.com/#ce46ed06-ee02-49d7-b8f3-0d9960fe1143
+        - objectName: schedules
+          destination: lemlistWebhook
+          schedule: "0 */6 * * *" # every 6 hours, at the top of the hour
+          requiredFields:
+            - fieldName: _id
+            - fieldName: name
+            - fieldName: secondsToWait
+            - fieldName: start
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: schedules
+        - objectName: campaigns
+        - objectName: hooks
