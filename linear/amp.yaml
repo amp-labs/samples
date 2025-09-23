@@ -1,0 +1,53 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteLinear
+    displayName: Linear read and write
+    provider: linear
+    read:
+      objects:
+        - objectName: issues
+          destination: linearWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://github.com/amp-labs/connectors/blob/main/providers/linear/graphql/issues.graphql
+          requiredFields:
+            - fieldName: id
+            - fieldName: title
+            - fieldName: name
+          optionalFields:
+            - fieldName: priority
+            - fieldName: createdAt
+            - fieldName: trashed
+          backfill:
+            defaultPeriod:
+              days: 30
+
+        - objectName: projectStatuses
+          destination: linearWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://github.com/amp-labs/connectors/blob/main/providers/linear/graphql/projectStatuses.graphql
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: description
+          optionalFieldsAuto: all   
+
+
+        - objectName: teams
+          destination: linearWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://github.com/amp-labs/connectors/blob/main/providers/linear/graphql/teams.graphql
+          requiredFields:
+            - fieldName: name
+            - fieldName: id
+            - fieldName: description
+            - fieldName: archivedAt
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: issues
+        - objectName: documents
+        - objectName: projects
+
+    proxy:
+      enabled: true
