@@ -1,0 +1,48 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteAsana
+    displayName: Asana read and write
+    provider: asana
+    read:
+      objects:
+        - objectName: projects
+          destination: asanaWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.asana.com/reference/getproject
+          requiredFields:
+            - fieldName: gid
+            - fieldName: name
+            - fieldName: archived
+          optionalFields:
+            - fieldName: current_status
+            - fieldName: resource_type
+
+        - objectName: users
+          destination: asanaWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.asana.com/reference/getuser
+          requiredFields:
+            - fieldName: gid
+            - fieldName: name
+            - fieldName: email
+          optionalFieldsAuto: all   
+
+        - objectName: workspaces
+          destination: asanaWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.asana.com/reference/getworkspace
+          requiredFields:
+            - fieldName: gid  
+            - fieldName: resource_type
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: tasks
+        - objectName: portfolios
+        - objectName: teams
+
+    proxy:
+      enabled: true
