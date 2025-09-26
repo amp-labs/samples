@@ -1,0 +1,45 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteLinkedIn
+    displayName: LinkedIn read and write
+    provider: linkedIn
+    # Define what you want to read
+    # Learn more: https://docs.withampersand.com/docs/read-actions
+    read:
+      objects:
+
+        - objectName: adAccounts
+          destination: linkedInWebhooks
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names can be found at https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-accounts?view=li-lms-2025-09&tabs=http#search-for-accounts
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: adCampaignGroups
+          destination: linkedInWebhooks
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names can be found at https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-campaign-groups?view=li-lms-2025-09&tabs=http#search-for-campaign-groups
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: adTargetingFacets
+          destination: linkedInWebhooks
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names can be found at https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/advertising-targeting/ads-targeting?view=li-lms-2025-09&tabs=http#ad-targeting-facets
+          requiredFields:
+            - fieldName: facetName
+            - fieldName: adTargetingFacetUrn
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: adAccounts
+        - objectName: adTargetTemplates
+        - objectName: conversationAds
+
+    proxy:
+      enabled: true
