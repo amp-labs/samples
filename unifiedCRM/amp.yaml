@@ -1,99 +1,313 @@
-# This example manifest demonstrates how you can make use of object and field mappings in Ampersand
-# to create your own "unified API" for CRMs, using Hubspot and Salesforce as examples.
-# When you receive data that has been synced from either CRM, it will have the same schema.
-# Learn more about object and field mapping at https://docs.withampersand.com/object-and-field-mapping.
+# unifiedCRM/amp.yaml
+# Unified CRM API - Compatible with merge.dev's common model
+# Key difference: You control what fields to include, not limited by lowest common denominator
 
 specVersion: 1.0.0
 integrations:
-  - name: salesforceIntegration
-    displayName: Salesforce Integration
+  # ============= SALESFORCE =============
+  - name: salesforce_unified
+    displayName: Salesforce (Unified CRM)
     provider: salesforce
     read:
       objects:
-
-        - objectName: account
-          mapToName: company # Always map the account object to company
-          mapToDisplayName: Company
-          destination: defaultWebhook
-          schedule: "*/10 * * * *" # Every 10 minutes
+        # Account → Unified "company" object
+        - objectName: Account
+          mapToName: company
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
           requiredFields:
-            - fieldName: name
-            - fieldName: phone
-            - fieldName: annualrevenue
-            - fieldName: numberofemployees
-            - fieldName: website
-            # Salesforce has multiple country fields, ask user which one they want to use
-            - mapToName: country
-              mapToDisplayName: Country
-          backfill:
-            defaultPeriod:
-              fullHistory: true
+            # Core fields that exist across all CRMs
+            - fieldName: Id
+              mapToName: id
+            - fieldName: Name
+              mapToName: name
+            - fieldName: Website
+              mapToName: website
+            - fieldName: Industry
+              mapToName: industry
+            - fieldName: NumberOfEmployees
+              mapToName: employee_count
+            - fieldName: OwnerId
+              mapToName: owner_id
+            # Salesforce-specific fields
+            - fieldName: Type
+            - fieldName: AccountNumber
+            - fieldName: AnnualRevenue
 
-        - objectName: contact
-          destination: defaultWebhook
-          schedule: "*/10 * * * *" # Every 10 minutes
+        # Contact → Unified "person" object
+        - objectName: Contact
+          mapToName: person
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
           requiredFields:
-            - fieldName: firstname
-            - fieldName: lastname
-            - fieldName: email
-            # Salesforce has multiple phone fields, ask user which one they want to use
-            - mapToName: phone
-              mapToDisplayName: Phone
-            # Always map the lastactivity field to lastcontacted
-            - fieldName: lastactivity
-              mapToName: lastcontacted
-          backfill:
-            defaultPeriod:
-              fullHistory: true
+            - fieldName: Id
+              mapToName: id
+            - fieldName: FirstName
+              mapToName: first_name
+            - fieldName: LastName
+              mapToName: last_name
+            - fieldName: Email
+              mapToName: email
+            - fieldName: AccountId
+              mapToName: company_id
+            - fieldName: OwnerId
+              mapToName: owner_id
+            # Salesforce-specific
+            - fieldName: LeadSource
+
+        # Opportunity → Unified "deal" object
+        - objectName: Opportunity
+          mapToName: deal
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
+          requiredFields:
+            - fieldName: Id
+              mapToName: id
+            - fieldName: Name
+              mapToName: name
+            - fieldName: Amount
+              mapToName: value
+            - fieldName: StageName
+              mapToName: stage
+            - fieldName: CloseDate
+              mapToName: expected_close
+            - fieldName: AccountId
+              mapToName: company_id
+            - fieldName: OwnerId
+              mapToName: owner_id
 
     write:
       objects:
-        - objectName: account
+        - objectName: Account
           inheritMapping: true
-        - objectName: contact
+        - objectName: Contact
+          inheritMapping: true
+        - objectName: Opportunity
           inheritMapping: true
 
-  - name: hubspotIntegration
-    displayName: Hubspot Integration
+  # ============= HUBSPOT =============
+  - name: hubspot_unified
+    displayName: HubSpot (Unified CRM)
     provider: hubspot
     module: crm
     read:
       objects:
-
-        - objectName: company
-          destination: defaultWebhook
-          schedule: "*/10 * * * *" # Every 10 minutes
+        # Company → Unified "company" object
+        - objectName: companies
+          mapToName: company
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
           requiredFields:
+            - fieldName: id
+              mapToName: id
             - fieldName: name
-            - fieldName: phone
-            - fieldName: annualrevenue
+              mapToName: name
+            - fieldName: domain
+              mapToName: website
+            - fieldName: industry
+              mapToName: industry
             - fieldName: numberofemployees
-            - fieldName: website
-            - fieldName: country
-          backfill:
-            defaultPeriod:
-              fullHistory: true
+              mapToName: employee_count
+            - fieldName: hubspot_owner_id
+              mapToName: owner_id
+            # HubSpot-specific fields
+            - fieldName: lifecyclestage
+            - fieldName: hs_lead_status
 
-        - objectName: contact
-          destination: defaultWebhook
-          schedule: "*/10 * * * *" # Every 10 minutes.
+        # Contact → Unified "person" object
+        - objectName: contacts
+          mapToName: person
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
           requiredFields:
+            - fieldName: id
+              mapToName: id
             - fieldName: firstname
+              mapToName: first_name
             - fieldName: lastname
+              mapToName: last_name
             - fieldName: email
-            # Hubspot has multiple phone fields, ask user which one they want to use
-            - mapToName: phone
-              mapToDisplayName: Phone
-            # Always map the notes_last_contacted field to lastcontacted
-            - fieldName: notes_last_contacted
-              mapToName: lastcontacted
-          backfill:
-            defaultPeriod:
-              fullHistory: true
+              mapToName: email
+            - fieldName: associatedcompanyid
+              mapToName: company_id
+            - fieldName: hubspot_owner_id
+              mapToName: owner_id
+            # HubSpot-specific
+            - fieldName: lifecyclestage
+
+        # Deal → Unified "deal" object
+        - objectName: deals
+          mapToName: deal
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
+          requiredFields:
+            - fieldName: id
+              mapToName: id
+            - fieldName: dealname
+              mapToName: name
+            - fieldName: amount
+              mapToName: value
+            - fieldName: dealstage
+              mapToName: stage
+            - fieldName: closedate
+              mapToName: expected_close
+            - fieldName: hubspot_owner_id
+              mapToName: owner_id
 
     write:
       objects:
-        - objectName: company
+        - objectName: companies
           inheritMapping: true
-        - objectName: contact
+        - objectName: contacts
+          inheritMapping: true
+        - objectName: deals
+          inheritMapping: true
+
+  # ============= ZOHO CRM =============
+  - name: zoho_unified
+    displayName: Zoho CRM (Unified CRM)
+    provider: zoho
+    module: crm
+    read:
+      objects:
+        # Accounts → Unified "company" object
+        - objectName: Accounts
+          mapToName: company
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
+          requiredFields:
+            - fieldName: id
+              mapToName: id
+            - fieldName: Account_Name
+              mapToName: name
+            - fieldName: Website
+              mapToName: website
+            - fieldName: Industry
+              mapToName: industry
+            - fieldName: Employees
+              mapToName: employee_count
+            - fieldName: Owner
+              mapToName: owner_id
+
+        # Contacts → Unified "person" object
+        - objectName: Contacts
+          mapToName: person
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
+          requiredFields:
+            - fieldName: id
+              mapToName: id
+            - fieldName: First_Name
+              mapToName: first_name
+            - fieldName: Last_Name
+              mapToName: last_name
+            - fieldName: Email
+              mapToName: email
+            - fieldName: Account_Name
+              mapToName: company_id
+            - fieldName: Owner
+              mapToName: owner_id
+
+        # Deals → Unified "deal" object
+        - objectName: Deals
+          mapToName: deal
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
+          requiredFields:
+            - fieldName: id
+              mapToName: id
+            - fieldName: Deal_Name
+              mapToName: name
+            - fieldName: Amount
+              mapToName: value
+            - fieldName: Stage
+              mapToName: stage
+            - fieldName: Closing_Date
+              mapToName: expected_close
+            - fieldName: Account_Name
+              mapToName: company_id
+            - fieldName: Owner
+              mapToName: owner_id
+
+    write:
+      objects:
+        - objectName: Accounts
+          inheritMapping: true
+        - objectName: Contacts
+          inheritMapping: true
+        - objectName: Deals
+          inheritMapping: true
+
+  # ============= DYNAMICS 365 =============
+  - name: dynamics_unified
+    displayName: Dynamics 365 (Unified CRM)
+    provider: dynamicsCRM
+    read:
+      objects:
+        # accounts → Unified "company" object
+        - objectName: accounts
+          mapToName: company
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
+          requiredFields:
+            - fieldName: accountid
+              mapToName: id
+            - fieldName: name
+              mapToName: name
+            - fieldName: websiteurl
+              mapToName: website
+            - fieldName: industrycode
+              mapToName: industry
+            - fieldName: numberofemployees
+              mapToName: employee_count
+            - fieldName: ownerid
+              mapToName: owner_id
+
+        # contacts → Unified "person" object
+        - objectName: contacts
+          mapToName: person
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
+          requiredFields:
+            - fieldName: contactid
+              mapToName: id
+            - fieldName: firstname
+              mapToName: first_name
+            - fieldName: lastname
+              mapToName: last_name
+            - fieldName: emailaddress1
+              mapToName: email
+            - fieldName: parentcustomerid
+              mapToName: company_id
+            - fieldName: ownerid
+              mapToName: owner_id
+
+        # opportunities → Unified "deal" object
+        - objectName: opportunities
+          mapToName: deal
+          destination: crmWebhook
+          schedule: "*/15 * * * *"
+          requiredFields:
+            - fieldName: opportunityid
+              mapToName: id
+            - fieldName: name
+              mapToName: name
+            - fieldName: estimatedvalue
+              mapToName: value
+            - fieldName: salesstagecode
+              mapToName: stage
+            - fieldName: estimatedclosedate
+              mapToName: expected_close
+            - fieldName: customerid
+              mapToName: company_id
+            - fieldName: ownerid
+              mapToName: owner_id
+
+    write:
+      objects:
+        - objectName: accounts
+          inheritMapping: true
+        - objectName: contacts
+          inheritMapping: true
+        - objectName: opportunities
           inheritMapping: true
