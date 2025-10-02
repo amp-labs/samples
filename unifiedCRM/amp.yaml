@@ -1,7 +1,3 @@
-# unifiedCRM/amp.yaml
-# Unified CRM API - Compatible with merge.dev's common model
-# Key difference: You control what fields to include, not limited by lowest common denominator
-
 specVersion: 1.0.0
 integrations:
   # ============= SALESFORCE =============
