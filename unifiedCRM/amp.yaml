@@ -31,7 +31,7 @@ integrations:
               mapToName: website
             - fieldName: numberofemployees
               mapToName: employee_count
-            # user has to select which fields to map
+            # Prompt the user to select the fields to map
             - mapToName: addresses
               mapToDisplayName: Account address
               prompt: Please select the field that contains address for this account
@@ -57,6 +57,7 @@ integrations:
               mapToName: account
             - fieldName: ownerid
               mapToName: owner
+            # Prompt the user to select the fields to map
             - mapToName: addresses
               mapToDisplayName: Contact address
               prompt: Please select the field that contains address for this contact
@@ -131,7 +132,7 @@ integrations:
               mapToName: website
             - fieldName: numberofemployees
               mapToName: employee_count
-            # user has to select which fields to map
+            # Prompt the user to select the fields to map
             - mapToName: addresses
               mapToDisplayName: Company address
               prompt: Please select the field that contains address for this company
@@ -157,6 +158,7 @@ integrations:
               mapToName: account
             - fieldName: hubspot_owner_id
               mapToName: owner
+            # Prompt the user to select the fields to map
             - mapToName: addresses
               mapToDisplayName: Contact address
               prompt: Please select the field that contains address for this contact
@@ -168,6 +170,7 @@ integrations:
         - objectName: deals
           mapToName: deal
           destination: crmWebhook
+          schedule: "*/15 * * * *"
           requiredFields:
             - fieldName: hs_object_id
               mapToName: remote_id
@@ -203,71 +206,95 @@ integrations:
     read:
       objects:
         # Accounts → Unified "company" object
-        - objectName: Accounts
+        - objectName: accounts
           mapToName: company
           destination: crmWebhook
           schedule: "*/15 * * * *"
           requiredFields:
             - fieldName: id
-              mapToName: id
-            - fieldName: Account_Name
+              mapToName: remote_id
+            - fieldName: created_time
+              mapToName: remote_created_at
+            - fieldName: modified_time
+              mapToName: remote_updated_at
+            - fieldName: owner
+              mapToName: owner
+            - fieldName: account_name
               mapToName: name
-            - fieldName: Website
-              mapToName: website
-            - fieldName: Industry
+            - fieldName: description
+              mapToName: description
+            - fieldName: industry
               mapToName: industry
-            - fieldName: Employees
+            - fieldName: website
+              mapToName: website
+            - fieldName: employees
               mapToName: employee_count
-            - fieldName: Owner
-              mapToName: owner_id
+            # Prompt the user to select the fields to map
+            - mapToName: addresses
+              mapToDisplayName: Account address
+              prompt: Please select the field that contains address for accounts
+            - mapToName: phone_numbers
+              mapToDisplayName: Account phone number
+              prompt: Please select the field that contains phone number for accounts
 
         # Contacts → Unified "person" object
-        - objectName: Contacts
+        - objectName: contacts
           mapToName: person
           destination: crmWebhook
           schedule: "*/15 * * * *"
           requiredFields:
             - fieldName: id
-              mapToName: id
-            - fieldName: First_Name
+              mapToName: remote_id
+            - fieldName: created_time
+              mapToName: remote_created_at
+            - fieldName: first_name
               mapToName: first_name
-            - fieldName: Last_Name
+            - fieldName: last_name
               mapToName: last_name
-            - fieldName: Email
-              mapToName: email
-            - fieldName: Account_Name
-              mapToName: company_id
-            - fieldName: Owner
-              mapToName: owner_id
+            - fieldName: account_name
+              mapToName: account
+            - fieldName: owner
+              mapToName: owner
+            # Prompt the user to select the fields to map
+            - mapToName: addresses
+              mapToDisplayName: Contact address
+              prompt: Please select the field that contains address for contacts
+            - mapToName: email_addresses
+              mapToDisplayName: Contact email address
+              prompt: Please select the field that contains email address for contacts
 
         # Deals → Unified "deal" object
-        - objectName: Deals
+        - objectName: deals
           mapToName: deal
           destination: crmWebhook
           schedule: "*/15 * * * *"
           requiredFields:
             - fieldName: id
-              mapToName: id
-            - fieldName: Deal_Name
+              mapToName: remote_id
+            - fieldName: created_time
+              mapToName: remote_created_at
+            - fieldName: deal_name
               mapToName: name
-            - fieldName: Amount
+            - fieldName: description
+              mapToName: description
+            - fieldName: amount
               mapToName: value
-            - fieldName: Stage
+            - fieldName: owner
+              mapToName: owner
+            - fieldName: account_name
+              mapToName: company
+            - fieldName: stage
               mapToName: stage
-            - fieldName: Closing_Date
+            - fieldName: closing_date
               mapToName: expected_close
-            - fieldName: Account_Name
-              mapToName: company_id
-            - fieldName: Owner
-              mapToName: owner_id
 
     write:
       objects:
-        - objectName: Accounts
+        - objectName: accounts
           inheritMapping: true
-        - objectName: Contacts
+        - objectName: contacts
           inheritMapping: true
-        - objectName: Deals
+        - objectName: deals
           inheritMapping: true
 
   # ============= DYNAMICS 365 =============
@@ -283,7 +310,11 @@ integrations:
           schedule: "*/15 * * * *"
           requiredFields:
             - fieldName: accountid
-              mapToName: id
+              mapToName: remote_id
+            - fieldName: createdtime
+              mapToName: remote_created_at
+            - fieldName: modifiedtime
+              mapToName: remote_updated_at
             - fieldName: name
               mapToName: name
             - fieldName: websiteurl
@@ -302,7 +333,9 @@ integrations:
           schedule: "*/15 * * * *"
           requiredFields:
             - fieldName: contactid
-              mapToName: id
+              mapToName: remote_id
+            - fieldName: createdtime
+              mapToName: remote_created_at
             - fieldName: firstname
               mapToName: first_name
             - fieldName: lastname
@@ -321,7 +354,9 @@ integrations:
           schedule: "*/15 * * * *"
           requiredFields:
             - fieldName: opportunityid
-              mapToName: id
+              mapToName: remote_id
+            - fieldName: createdtime
+              mapToName: remote_created_at
             - fieldName: name
               mapToName: name
             - fieldName: estimatedvalue
