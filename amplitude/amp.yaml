@@ -1,0 +1,44 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteAmplitude
+    displayName: Amplitude read and write
+    provider: amplitude
+    read:
+      objects:
+        - objectName: events
+          destination: amplitudeWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://amplitude.com/docs/apis/analytics/dashboard-rest#get-events-list
+          requiredFields:
+            - fieldName: id
+            - fieldName: autohidden
+              mapToName: project_name
+              mapToDisplayName: display Name
+          optionalFieldsAuto: all   
+
+        - objectName: annotations
+          destination: amplitudeWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://amplitude.com/docs/apis/analytics/chart-annotations
+          requiredFields:
+            - fieldName: id
+            - fieldName: data
+            - fieldName: label
+          optionalFieldsAuto: all   
+
+        - objectName: taxonomy/category
+          destination: amplitudeWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://amplitude.com/docs/apis/analytics/taxonomy#get-all-event-categories
+          requiredFields:
+            - fieldName: id
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: attribution
+        - objectName: annotations
+        - objectName: release
+
+    proxy:
+      enabled: true
