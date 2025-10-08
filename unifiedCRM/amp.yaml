@@ -32,10 +32,10 @@ integrations:
             - fieldName: numberofemployees
               mapToName: employee_count
             # Prompt the user to select the fields to map
-            - mapToName: addresses
+            - mapToName: address
               mapToDisplayName: Account address
               prompt: Please select the field that contains address for this account
-            - mapToName: phone_numbers
+            - mapToName: phone_number
               mapToDisplayName: Account phone number
               prompt: Please select the field that contains phone number for this account
 
@@ -58,11 +58,11 @@ integrations:
             - fieldName: ownerid
               mapToName: owner
             # Prompt the user to select the fields to map
-            - mapToName: addresses
+            - mapToName: address
               mapToDisplayName: Contact address
               prompt: Please select the field that contains address for this contact
             - fieldName: email
-              mapToName: email_addresses
+              mapToName: email_address
 
         # Opportunity → Unified "deal" object
         - objectName: opportunity
@@ -133,10 +133,10 @@ integrations:
             - fieldName: numberofemployees
               mapToName: employee_count
             # Prompt the user to select the fields to map
-            - mapToName: addresses
+            - mapToName: address
               mapToDisplayName: Company address
               prompt: Please select the field that contains address for this company
-            - mapToName: phone_numbers
+            - mapToName: phone_number
               mapToDisplayName: Company phone number
               prompt: Please select the field that contains phone number for this company
 
@@ -159,10 +159,10 @@ integrations:
             - fieldName: hubspot_owner_id
               mapToName: owner
             # Prompt the user to select the fields to map
-            - mapToName: addresses
+            - mapToName: address
               mapToDisplayName: Contact address
               prompt: Please select the field that contains address for this contact
-            - mapToName: email_addresses
+            - mapToName: email_address
               mapToDisplayName: Contact email address
               prompt: Please select the field that contains email address for this contact
 
@@ -230,10 +230,10 @@ integrations:
             - fieldName: employees
               mapToName: employee_count
             # Prompt the user to select the fields to map
-            - mapToName: addresses
+            - mapToName: address
               mapToDisplayName: Account address
               prompt: Please select the field that contains address for accounts
-            - mapToName: phone_numbers
+            - mapToName: phone_number
               mapToDisplayName: Account phone number
               prompt: Please select the field that contains phone number for accounts
 
@@ -256,10 +256,10 @@ integrations:
             - fieldName: owner
               mapToName: owner
             # Prompt the user to select the fields to map
-            - mapToName: addresses
+            - mapToName: address
               mapToDisplayName: Contact address
               prompt: Please select the field that contains address for contacts
-            - mapToName: email_addresses
+            - mapToName: email_address
               mapToDisplayName: Contact email address
               prompt: Please select the field that contains email address for contacts
 
