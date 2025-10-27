@@ -1,0 +1,48 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteChorus
+    displayName: Chorus read and write
+    provider: chorus
+    # Define what you want to read
+    # Learn more: https://docs.withampersand.com/docs/read-actions
+    read:
+      objects:
+
+        - objectName: teams
+          destination: chorusWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://api-docs.chorus.ai/#894c7066-c68f-4c8a-9470-d1b2c998dd36
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: filters
+          destination: chorusWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://api-docs.chorus.ai/#68ee2093-f321-4564-b342-5520f974a1b7
+          requiredFields:
+            - fieldName: id
+            - fieldName: filter_name
+          optionalFieldsAuto: all
+
+        - objectName: scorecards
+          destination: chorusWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://api-docs.chorus.ai/#4dc74394-9852-4b6b-9555-cb8ce951557b
+          requiredFields:
+            - fieldName: id
+            - fieldName: initiative
+          backfill:
+            defaultPeriod:
+              days: 30 # Backfill the last 30 days of data
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: filters
+        - objectName: playlists
+        - objectName: moments
+
+    proxy:
+      enabled: true
