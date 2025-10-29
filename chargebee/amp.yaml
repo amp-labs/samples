@@ -1,0 +1,57 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteChargebee
+    displayName: Chargebee read and write
+    provider: chargebee
+    read:
+      objects:
+        - objectName: customers
+          destination: chargebeeWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://apidocs.chargebee.com/docs/api/customers?lang=curl&_gl=1%2a1ovw5bg%2a_up%2aMQ..%2a_ga%2aNzczMjE4NjIzLjE3NjE3MDczNjk.%2a_ga_EJ2MQ2ENV4%2aczE3NjE3MDczNjgkbzEkZzAkdDE3NjE3MDczNjgkajYwJGwwJGgw#list_customers
+          requiredFields:
+            - fieldName: id
+            - fieldName: first_name
+            - fieldName: last_name
+          optionalFields:
+            - fieldName: card_status
+            - fieldName: updated_at
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: subscriptions
+          destination: chargebeeWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://apidocs.chargebee.com/docs/api/subscriptions?lang=curl#list_subscriptions
+          requiredFields:
+            - fieldName: customer_id
+            - fieldName: next_billing_at
+            - fieldName: status
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: invoices
+          destination: chargebeeWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://apidocs.chargebee.com/docs/api/invoices?lang=curl#list_invoices
+          requiredFields:
+            - fieldName: id  
+            - fieldName: amount_paid
+            - fieldName: currency_code
+            - fieldName: billing_address
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+    write:
+      objects:
+        - objectName: invoices
+        - objectName: promotional_credits
+        - objectName: customers
+
+    proxy:
+      enabled: true
