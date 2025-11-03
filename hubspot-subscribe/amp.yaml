@@ -1,0 +1,70 @@
+specVersion: 1.0.0
+integrations:
+  - name: hubspotSubscribe
+    displayName: Hubspot Subscribe Integration
+    provider: hubspot
+    module: crm
+    # Read actions for field mappings and historic backfill.
+    # See https://docs.withampersand.com/docs/read-actions for more information.
+    read:
+      objects:
+        - objectName: contacts
+          destination: defaultWebhook # define your webhook in Ampersand Dashboard.
+          # These are fields that are always read for every customer.
+          requiredFields:
+            - fieldName: firstname
+            - fieldName: lastname
+            - fieldName: email
+            - fieldName: lifecyclestage
+            # Example of a pre-mapped field.
+            - fieldName: hs_object_id
+              mapToName: id
+            # Example of a user-mapped field.
+            - mapToName: priority
+              mapToDisplayName: Priority
+              prompt: What field to you use to track how strategic this contact is?
+          # Add `optionalFieldsAuto` to allow customers to pick any of their Contact fields,
+          # Alternatively you can include a pre-chosen list in `optionalFields`.
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: deals
+          destination: defaultWebhook
+          requiredFields:
+            - fieldName: dealname
+            - fieldName: hs_object_id
+              mapToName: id
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+    # Subscribe actions for real time updates.
+    # See https://docs.withampersand.com/subscribe-actions for more information.
+    subscribe:
+      objects:
+        - objectName: contacts
+          destination: defaultWebhook
+          inheritFieldsAndMapping: true # Inherit the fields and mapping from the read action.
+          createEvent:
+            enabled: always
+          updateEvent:
+            enabled: always
+            requiredWatchFields:
+              - lifecyclestage
+            # watchFieldsAuto: all # Alternative to `requiredWatchFields` if you wish to watch all fields
+          deleteEvent:
+            enabled: always
+
+        - objectName: deals
+          destination: defaultWebhook
+          inheritFieldsAndMapping: true # Inherit the fields and mapping from the read action.
+          createEvent:
+            enabled: always
+          updateEvent:
+            enabled: always
+            watchFieldsAuto: all # Watch all the fields.
+          deleteEvent:
+            enabled: always
