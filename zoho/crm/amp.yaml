@@ -1,6 +1,6 @@
 specVersion: 1.0.0
 integrations:
-  - name: readWriteZohoSample
+  - name: read-write-zoho-crm
     provider: zoho
     read:
       objects:
