@@ -2,6 +2,7 @@ specVersion: 1.0.0
 integrations:
   - name: read-write-zoho-crm
     provider: zoho
+    module: crm
     read:
       objects:
         # Creating an object for reading deals resource.
