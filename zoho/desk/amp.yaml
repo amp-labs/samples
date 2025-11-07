@@ -1,0 +1,43 @@
+specVersion: 1.0.0
+integrations:
+  - name: read-write-zoho-desk
+    provider: zoho
+    module: desk
+    read:
+      objects:
+        # Creating an object for reading Tickets resource.
+        - objectName: tickets
+          destination: zohoDeskWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: accountid
+            - fieldName: subject
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        # Creating an object for reading Contacts resource.
+        - objectName: contacts
+          destination: zohoDeskWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: email
+            - fieldName: description
+
+        # Creating an object for reading Departments resource.
+        - objectName: departments
+          destination: zohoDeskWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: creatorid
+            - fieldName: isenabled
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: tickets
