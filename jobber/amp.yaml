@@ -1,0 +1,50 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteJobber
+    displayName: Jobber read and write
+    provider: jobber
+    # Define what you want to read
+    # Learn more: https://docs.withampersand.com/docs/read-actions
+    read:
+      objects:
+
+        - objectName: apps
+          destination: jobberWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: displayName
+          optionalFieldsAuto: all
+
+        - objectName: clients
+          destination: jobberWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: properties
+          destination: jobberWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: expenses
+          destination: jobberWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: title
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: clients
+        - objectName: expenses
+        - objectName: productsAndServices
+   
+    proxy:
+      enabled: true
