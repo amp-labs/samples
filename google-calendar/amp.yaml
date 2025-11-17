@@ -28,6 +28,9 @@ integrations:
             - fieldName: summary
             - fieldName: location
           optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 28 # Due to Google API limits, max backfill period is 28 days.
 
         - objectName: settings
           destination: googleCalendarWebhook
