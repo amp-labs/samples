@@ -1,0 +1,30 @@
+specVersion: 1.0.0
+integrations:
+  - name: happyfoxchat-integration
+    provider: happyfox
+    read:
+      objects:
+        # More fields can be seen here
+        # https://developer.happyfoxchat.com/#get-all-agents
+        - objectName: agents
+          destination: happyfoxWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: name
+            - fieldName: _id
+            - fieldName: email
+            - fieldName: isAdmin
+          optionalFields:
+            - fieldName: displayName
+
+        # More fields can be seen here
+        # https://developer.happyfoxchat.com/#get-all-triggers
+        - objectName: triggered-chats
+          destination: happyfoxWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: name
+            - fieldName: description
+            - fieldName: active
+            - fieldName: departmentChoice
+          optionalFieldsAuto: all
