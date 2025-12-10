@@ -1,0 +1,51 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriterecurly
+    displayName: Recurly Read and Write 
+    provider: recurly
+    read:
+      objects:
+        - objectName: accounts
+          destination: recurlyWebhook
+          schedule: "*/10 * * * *"
+         # Field names can be found at https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_accounts
+          requiredFields:
+            - fieldName: id
+            - fieldName: company
+          optionalFields:
+            - fieldName: parent_account_id
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: plans
+          destination: recurlyWebhook
+          schedule: "*/10 * * * *"
+         # Field names can be found at https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_plans
+          requiredFields:
+          - fieldName: id
+          - fieldName: code
+          - fieldName: state    
+          optionalFieldsAuto: all   
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: items
+          destination: recurlyWebhook
+          # Field names can be found at https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_items
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: code
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+    write:
+      objects:
+        - objectName: items
+        - objectName: coupons
+    proxy:
+      enabled: true
