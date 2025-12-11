@@ -1,6 +1,6 @@
 specVersion: 1.0.0
 integrations:
-  - name: readAndWriterecurly
+  - name: readAndWriteRecurly
     displayName: Recurly Read and Write 
     provider: recurly
     read:
@@ -8,7 +8,7 @@ integrations:
         - objectName: accounts
           destination: recurlyWebhook
           schedule: "*/10 * * * *"
-         # Field names can be found at https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_accounts
+          # Field names can be found at https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_accounts
           requiredFields:
             - fieldName: id
             - fieldName: company
@@ -21,7 +21,7 @@ integrations:
         - objectName: plans
           destination: recurlyWebhook
           schedule: "*/10 * * * *"
-         # Field names can be found at https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_plans
+          # Field names can be found at https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_plans
           requiredFields:
           - fieldName: id
           - fieldName: code
