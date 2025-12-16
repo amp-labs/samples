@@ -25,3 +25,61 @@ integrations:
               mapToDisplayName: Location
               prompt: What field do you use to track the location associated with the transaction?
           optionalFieldsAuto: all
+
+  - name: invoicing-integration
+    provider: netsuite
+    read:
+      objects:
+        - objectName: invoice
+          destination: netsuiteWebhook
+          schedule: "*/15 * * * *"
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: tranid
+            - fieldName: entity
+            - fieldName: trandate
+            - fieldName: dueDate
+            - fieldName: subsidiary
+            - fieldName: currency
+            - fieldName: item
+            - mapToName: currency
+              mapToDisplayName: Currency
+              prompt: What field do you use to track the currency associated with the invoice?
+          optionalFieldsAuto: all
+
+        - objectName: creditMemo
+          destination: netsuiteWebhook
+          schedule: "*/20 * * * *"
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: tranid
+            - fieldName: entity
+            - fieldName: tranDate
+          optionalFieldsAuto: all
+
+        - objectName: customer
+          destination: netsuiteWebhook
+          schedule: "*/30 * * * *"
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: entityid
+            - fieldName: email
+            - fieldName: currency
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: invoice
+          inheritMapping: true
+        - objectName: creditMemo
+          inheritMapping: true
+        - objectName: customer
+          inheritMapping: true
+
