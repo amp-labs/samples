@@ -1,7 +1,7 @@
 specVersion: 1.0.0
 integrations:
   - name: readAndWriteAcuityScheduling
-    displayName: AcuityScheduling Read and Write 
+    displayName: AcuityScheduling Read and Write
     provider: acuityScheduling
     read:
       objects:
@@ -26,10 +26,10 @@ integrations:
           schedule: "*/10 * * * *"
          # Field names can be found at https://developers.acuityscheduling.com/reference/clients
           requiredFields:
-          - fieldName: id
-          - fieldName: email
-          - fieldName: phone    
-          optionalFieldsAuto: all   
+           - fieldName: id
+           - fieldName: email
+           - fieldName: phone
+          optionalFieldsAuto: all
 
 
         - objectName: calendars
