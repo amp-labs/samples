@@ -23,9 +23,9 @@ integrations:
           schedule: "*/10 * * * *"
           # Field names can be found at https://recurly.com/developers/api/v2021-02-25/index.html#operation/list_plans
           requiredFields:
-          - fieldName: id
-          - fieldName: code
-          - fieldName: state    
+           - fieldName: id
+           - fieldName: code
+           - fieldName: state
           optionalFieldsAuto: all   
           backfill:
             defaultPeriod:
