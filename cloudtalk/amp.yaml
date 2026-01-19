@@ -1,0 +1,44 @@
+specVersion: 1.0.0
+integrations:
+  - name: cloudtalk-integration
+    displayName: CloudTalk Test Integration
+    provider: cloudTalk
+    proxy:
+      enabled: true
+    read:
+      objects:
+        - objectName: contacts
+          destination: cloudTalkWebhook
+          schedule: "*/30 * * * *"
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: calls
+          destination: cloudTalkWebhook
+          schedule: "*/30 * * * *"
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: status
+          optionalFieldsAuto: all
+
+        - objectName: numbers
+          destination: cloudTalkWebhook
+          schedule: "*/30 * * * *"
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: number
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: calls
