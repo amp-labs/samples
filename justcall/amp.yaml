@@ -1,0 +1,27 @@
+specVersion: 1.0.0
+integrations:
+  - name: justcall-integration
+    displayName: JustCall Test Integration
+    provider: justcall
+
+    # Read Actions (Sync)
+    read:
+      objects:
+        - objectName: contacts
+          destination: justCallWebhook
+          schedule: "*/30 * * * *"
+          requiredFields:
+            - fieldName: id
+          backfill:
+            defaultPeriod:
+              days: 30
+          optionalFieldsAuto: all
+
+    # Write Actions
+    write:
+      objects:
+        - objectName: contacts
+
+    # Proxy Access
+    proxy:
+      enabled: true
