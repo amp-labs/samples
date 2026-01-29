@@ -1,0 +1,82 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteZoom
+    displayName: Zoom Integration
+    provider: zoom
+    read:
+      objects:
+        - objectName: users
+          destination: zoomWebhook
+          schedule: "*/10 * * * *"
+          # Always read these fields
+          # https://developers.zoom.us/docs/api/users/#tag/users/get/users
+          requiredFields:
+            - fieldName: display_name
+            - fieldName: id
+            - fieldName: email
+            - fieldName: employee_unique_id
+          # Customer can decide if they want us to read these fields.
+          optionalFields:
+            - fieldName: first_name
+            - fieldName: group_ids
+
+
+        - objectName: recordings
+          destination: zoomWebhook
+          schedule: "*/10 * * * *"
+          # Always read these fields
+          # https://developers.zoom.us/docs/api/meetings/#tag/cloud-recording/get/users/{userId}/recordings
+          requiredFields:
+            - fieldName: duration
+            - fieldName: id
+            - fieldName: recording_files
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 30
+
+        - objectName: meetings
+          destination: zoomWebhook
+          schedule: "*/10 * * * *"
+          # Always read these fields
+          # https://developers.zoom.us/docs/api/meetings/#tag/meetings/get/users/{userId}/meetings
+          requiredFields:
+            - fieldName: id
+            - fieldName: duration
+            - fieldName: join_url
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 30
+
+        - objectName: meeting_summaries
+          destination: zoomWebhook
+          schedule: "*/10 * * * *"
+          # Always read these fields
+          # https://developers.zoom.us/docs/api/meetings/#tag/summaries/get/meetings/meeting_summaries
+          requiredFields:
+            - fieldName: meeting_end_time
+            - fieldName: meeting_id
+            - fieldName: meeting_topic
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 30
+
+        - objectName: users_report
+          destination: zoomWebhook
+          schedule: "*/10 * * * *"
+          # Always read these fields
+          # https://developers.zoom.us/docs/api/meetings/#tag/reports/get/report/users
+          requiredFields:
+            - fieldName: email
+            - fieldName: id
+            - fieldName: user_name
+          optionalFieldsAuto: all
+
+          
+    write:
+      objects:
+        - objectName: tracking_fields
+        - objectName: devices
+        - objectName: users
