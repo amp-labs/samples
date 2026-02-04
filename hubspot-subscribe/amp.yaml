@@ -17,8 +17,8 @@ integrations:
             - fieldName: email
             - fieldName: lifecyclestage
             # Example of a pre-mapped field.
-            - fieldName: hs_object_id
-              mapToName: id
+            - fieldName: id
+              mapToName: external_id
             # Example of a user-mapped field.
             - mapToName: priority
               mapToDisplayName: Priority
@@ -34,8 +34,8 @@ integrations:
           destination: defaultWebhook
           requiredFields:
             - fieldName: dealname
-            - fieldName: hs_object_id
-              mapToName: id
+            - fieldName: id
+              mapToName: external_id
           optionalFieldsAuto: all
           backfill:
             defaultPeriod:
