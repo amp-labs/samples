@@ -1,0 +1,41 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteDropboxSign
+    displayName: Dropbox Sign read and write
+    provider: dropboxSign
+    read:
+      objects:
+        - objectName: template
+          destination: dropboxSignWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.hellosign.com/api/reference/operation/templateList/
+          requiredFields:
+            - fieldName: template_id
+            - fieldName: title
+            - fieldName: is_creator
+          optionalFields:
+            - fieldName: updated_at
+            - fieldName: documents
+            - fieldName: accounts
+            - fieldName: cc_roles
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+      
+        - objectName: api_app
+          destination: dropboxSignWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.hellosign.com/api/reference/operation/apiAppList/
+          requiredFields:
+            - fieldName: callback_url
+            - fieldName: client_id
+            - fieldName: created_at
+          optionalFieldsAuto: all   
+          
+    write:
+      objects:
+        - objectName: account
+        - objectName: api_app
+
+    proxy:
+      enabled: true
