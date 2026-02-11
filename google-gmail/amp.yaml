@@ -14,10 +14,7 @@ integrations:
           # Field names come from https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/list
           requiredFields:
             - fieldName: id
-            # Nested fields are supported for this object read more here:
-            # https://docs.withampersand.com/object-and-field-mapping#nested-field-mapping
-            - fieldName: "$['payload']['body']"
-            - fieldName: "$['payload']['mimeType']"
+            - fieldName: payload
           optionalFieldsAuto: all
 
         - objectName: labels
