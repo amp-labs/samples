@@ -14,7 +14,6 @@ integrations:
           # Field names come from https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/list
           requiredFields:
             - fieldName: id
-            - fieldName: threadId
             - fieldName: "$['payload']['body']"
             - fieldName: "$['payload']['mimeType']"
           optionalFieldsAuto: all
