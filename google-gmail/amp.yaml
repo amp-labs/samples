@@ -1,7 +1,7 @@
 specVersion: 1.0.0
 integrations:
-  - name: readGoogleGmail
-    displayName: Google gmail read
+  - name: readAndWriteGoogleGmail
+    displayName: Google gmail read and write
     provider: google
     module: gmail
     # Define what you want to read
@@ -14,7 +14,10 @@ integrations:
           # Field names come from https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/list
           requiredFields:
             - fieldName: id
-            - fieldName: threadId
+            # Nested fields are supported for this object read more here:
+            # https://docs.withampersand.com/object-and-field-mapping#nested-field-mapping
+            - fieldName: "$['payload']['body']"
+            - fieldName: "$['payload']['mimeType']"
           optionalFieldsAuto: all
 
         - objectName: labels
@@ -26,6 +29,10 @@ integrations:
             - fieldName: name
             - fieldName: type
           optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: drafts
 
     proxy:
       enabled: true
