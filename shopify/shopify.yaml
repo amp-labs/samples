@@ -1,0 +1,47 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteShopify
+    displayName: Shopify read and write
+    provider: shopify
+    # Define what you want to read
+    # Learn more: https://docs.withampersand.com/docs/read-actions
+    read:
+      objects:
+        - objectName: products
+          destination: shopifyWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from Shopify GraphQL Admin API schema.
+          requiredFields:
+            - fieldName: id
+            - fieldName: title
+            - fieldName: updatedAt
+          optionalFieldsAuto: all
+
+        - objectName: orders
+          destination: shopifyWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from Shopify GraphQL Admin API schema.
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: updatedAt
+          optionalFieldsAuto: all
+
+        - objectName: customers
+          destination: shopifyWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from Shopify GraphQL Admin API schema.
+          requiredFields:
+            - fieldName: id
+            - fieldName: email
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: customers
+        - objectName: orders
+        - objectName: products
+
+    proxy:
+      enabled: true
+
