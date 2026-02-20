@@ -1,0 +1,10 @@
+# Okta Proxy Integration
+# API Documentation: https://developer.okta.com/docs/reference/core-okta-api/
+
+specVersion: 1.0.0
+integrations:
+  - name: proxyOkta
+    displayName: Okta Proxy Integration
+    provider: okta
+    proxy:
+      enabled: true
