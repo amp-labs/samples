@@ -3,9 +3,7 @@ integrations:
   - name: readAndWriteSalesforceAccountEngagement
     displayName: Salesforce read and write for Account Engagement
     provider: salesforce
-    # For production use `account-engagement`:
-    ### module: account-engagement
-    module: account-engagement-demo
+    module: account-engagement
     read:
       objects:
         - objectName: emails
