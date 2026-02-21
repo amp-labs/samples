@@ -1,0 +1,58 @@
+specVersion: 1.0.0
+integrations:
+  - name: braze-integration
+    provider: braze
+    read:
+      objects:
+        # More fields can be seen here
+        # https://www.braze.com/docs/api/endpoints/catalogs/catalog_management/synchronous/get_list_catalogs
+        - objectName: catalogs
+          destination: brazeWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: name
+            - fieldName: description
+            - fieldName: num_items
+            - fieldName: fields
+          optionalFields:
+            - fieldName: source
+
+        # More fields can be seen here
+        # https://www.braze.com/docs/api/endpoints/export/canvas/get_canvases
+        - objectName: canvas
+          destination: brazeWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: title
+            - fieldName: email
+            - fieldName: email_status
+            - fieldName: account
+            - fieldName: organization_name
+          optionalFieldsAuto: all
+
+        # More fields can be seen here
+        # https://www.braze.com/docs/api/endpoints/export/campaigns/get_campaigns
+        - objectName: campaigns
+          destination: brazeWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: id
+            - fieldName: first_name
+            - fieldName: last_name
+            - fieldName: email
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: catalogs
+        - objectName: preference_center/v1
+        - objectName: content_blocks
+        - objectName: templates/email
