@@ -1,0 +1,52 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteAcuityScheduling
+    displayName: AcuityScheduling Read and Write
+    provider: acuityScheduling
+    read:
+      objects:
+        - objectName: appointments
+          destination: acuitySchedulingWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.acuityscheduling.com/reference/get-appointments
+          requiredFields:
+            - fieldName: id
+            - fieldName: firstName
+            - fieldName: lastName
+          optionalFields:
+            - fieldName: canceled
+            - fieldName: dateCreated
+            - fieldName: phone
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: clients
+          destination: acuitySchedulingWebhook
+          schedule: "*/10 * * * *"
+         # Field names can be found at https://developers.acuityscheduling.com/reference/clients
+          requiredFields:
+           - fieldName: id
+           - fieldName: email
+           - fieldName: phone
+          optionalFieldsAuto: all
+
+
+        - objectName: calendars
+          destination: acuitySchedulingWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.acuityscheduling.com/reference/get-calendars
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: replyTo
+            - fieldName: isValid
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: clients
+        - objectName: certificates
+        - objectName: appointments
+    proxy:
+      enabled: true
