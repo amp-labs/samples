@@ -1,0 +1,52 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWritesageIntacct
+    displayName: Sage Intacct read and write
+    provider: sageIntacct
+    read:
+      objects:
+        - objectName: general-ledger/account
+          destination: sageIntacctWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.sage.com/intacct/docs/openapi/gl/general-ledger.account/tag/Accounts/#tag/Accounts/operation/get-general-ledger-account-key
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: accountType
+          optionalFields:
+            - fieldName: closingType
+            - fieldName: normalBalance
+            - fieldName: isTaxable
+      
+        - objectName: company-config/contact
+          destination: sageIntacctWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.sage.com/intacct/docs/openapi/co/company-config.contact/tag/Contacts/#tag/Contacts/operation/get-company-config-contact-key
+          requiredFields:
+            - fieldName: companyName
+            - fieldName: firstName
+            - fieldName: lastName
+          optionalFieldsAuto: all
+
+
+        - objectName: company-config/employee
+          destination: sageIntacctWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.sage.com/intacct/docs/openapi/co/company-config.employee/tag/Employees/#tag/Employees/operation/get-company-config-employee-key
+          requiredFields:
+            - fieldName: id
+            - fieldName: jobTitle
+            - fieldName: status
+            - fieldName: gender
+          optionalFieldsAuto: all
+
+
+    write:
+      objects:
+        - objectName: general-ledger/account
+        - objectName: company-config/contact
+        - objectName: tax/contact-tax-group
+        - objectName: purchasing/price-list
+
+    proxy:
+      enabled: true
