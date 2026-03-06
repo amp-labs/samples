@@ -1,0 +1,21 @@
+specVersion: 1.0.0
+integrations:
+  - name: granolaIntegration
+    displayName: Granola Integration
+    provider: granola
+    proxy:
+      enabled: true
+    read:
+      objects: 
+        - objectName: notes
+          destination: granolaWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: title
+            - fieldName: summary_text
+            - fieldName: calendar_event
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 3
