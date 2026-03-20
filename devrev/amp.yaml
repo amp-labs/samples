@@ -1,0 +1,83 @@
+specVersion: 1.0.0
+integrations:
+  - name: devrevIntegration
+    displayName: DevRev Integration
+    provider: devrev
+    proxy:
+      enabled: true
+    read:
+      objects:
+        - objectName: articles
+          destination: devrevWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: description
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 25
+
+        - objectName: accounts
+          destination: devrevWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: display_name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 25
+
+        - objectName: meetings
+          destination: devrevWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: panels
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 25
+
+        - objectName: rev-orgs
+          destination: devrevWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: display_name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: rev-users
+          destination: devrevWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: display_name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: incidents
+          destination: devrevWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: applies_to_type
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+    write:
+      objects:
+        - objectName: content-template
+        - objectName: accounts
+        - objectName: articles
+        - objectName: directories
+        - objectName: org-schedule-fragments
+        - objectName: org-schedules
+        - objectName: question-answers
