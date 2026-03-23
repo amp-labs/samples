@@ -1,0 +1,36 @@
+specVersion: 1.0.0
+integrations:
+  - name: read-write-talkdesk
+    displayName: read and write talkdesk
+    provider: talkdesk
+    read:
+      objects:
+        - objectName: contacts
+          destination: talkdeskWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: phones
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: do-not-call-lists
+          destination: talkdeskWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: description
+          optionalFieldsAuto: all
+
+        - objectName: record-lists
+          destination: talkdeskWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: status
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: attributes
