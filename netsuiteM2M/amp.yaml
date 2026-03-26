@@ -1,0 +1,44 @@
+# Reference: https://docs.withampersand.com/define-integrations
+specVersion: 1.0.0
+
+integrations:
+  - name: netsuite-integration
+    provider: netsuiteM2M
+    displayName: Netsuite
+    module: restlet
+    read:
+      objects:
+      - objectName: creditmemo
+        destination: playWebhook
+        schedule: ''
+        requiredFields:
+        - fieldName: internalid
+        enabled: always
+        
+      - objectName: customer
+        destination: playWebhook
+        schedule: '*/10 * * * *'
+        requiredFields:
+        - fieldName: internalid
+          mapToName: idvalue
+        backfill:
+          defaultPeriod:
+            fullHistory: true
+        enabled: always
+        
+      - objectName: salesorder
+        destination: playWebhook
+        schedule: ''
+        requiredFields:
+        - fieldName: internalid
+          mapToName: idvalue
+        backfill:
+          defaultPeriod:
+            fullHistory: true
+            
+    write:
+      objects:
+      - objectName: salesorder
+      - objectName: customer
+      - objectName: creditmemo
+      - objectName: invoice
