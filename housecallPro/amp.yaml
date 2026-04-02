@@ -1,0 +1,194 @@
+specVersion: 1.0.0
+integrations:
+  - name: housecallProIntegration
+    displayName: HousecallPro Integration
+    provider: housecallPro
+    proxy:
+      enabled: true
+    read:
+      objects:
+        - objectName: customers
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: email
+            - fieldName: first_name
+            - fieldName: last_name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: employees
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: email
+            - fieldName: first_name
+            - fieldName: last_name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: estimates
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: estimate_number
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: jobs
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: invoice_number
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+
+        - objectName: job_fields/job_types
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: leads
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: status
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: lead_sources
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: price_book/material_categories
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: uuid
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: price_book/price_forms
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: price_book/services
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: uuid
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: service_zones
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+   
+        - objectName: routes
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+ 
+
+        - objectName: events
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: tags
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: invoices
+          destination: housecallProWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: status
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+    write:
+      objects:
+        - objectName: customers
+        - objectName: estimates
+        - objectName: jobs
+        - objectName: job_fields/job_types
+        - objectName: leads
+        - objectName: lead_sources
+        - objectName: price_book/materials
+        - objectName: price_book/material_categories
+        - objectName: price_book/price_forms
+        - objectName: tags
