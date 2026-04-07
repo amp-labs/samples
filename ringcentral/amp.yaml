@@ -1,0 +1,38 @@
+specVersion: 1.0.0
+integrations:
+  - name: read-write-ringcentral
+    provider: ringCentral
+    read:
+      objects:
+        - objectName: contacts
+          destination: ringcentralWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: id
+            - fieldName: uri
+            - fieldName: firstName
+            - fieldName: lastName
+          optionalFieldsAuto: all
+
+        - objectName: meetings
+          destination: ringcentralWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: startTime
+            - fieldName: hostInfo
+          optionalFields:
+            - fieldName: displayName
+
+        - objectName: comm-handling/states
+          destination: ringcentralWebhook
+          schedule: "0 */6 * * *" # every 6 hours
+          requiredFields:
+            - fieldName: enabled
+            - fieldName: displayName
+            - fieldName: conditions
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: contacts
+        - objectName: bridges
