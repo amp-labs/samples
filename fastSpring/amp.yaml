@@ -3,7 +3,6 @@ integrations:
   - name: readAndWriteFastSpring
     displayName: FastSpring read and write
     provider: fastSpring
-
     read:
       objects:
         - objectName: accounts
