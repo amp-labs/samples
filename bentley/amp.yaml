@@ -1,0 +1,48 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteBentley
+    displayName: Bentley read and write
+    provider: bentley
+    read:
+      objects:
+        - objectName: itwins
+          destination: bentleyWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.bentley.com/apis/itwins/operations/get-my-itwins/
+          requiredFields:
+            - fieldName: id
+            - fieldName: class
+            - fieldName: subClass
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+      
+        - objectName: curated-content/cesium
+          destination: bentleyWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.bentley.com/apis/cesium-curated-content/operations/list-content/#list-content-operation
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all   
+
+
+
+        - objectName: itwins/recents
+          destination: bentleyWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.bentley.com/apis/contextcapture/operations/jobs-get-all/#jobs-get-all-operation
+          requiredFields:
+            - fieldName: id
+            - fieldName: type
+          optionalFieldsAuto: all   
+
+
+    write:
+      objects:
+        - objectName: itwins
+        - objectName: imodels
+
+    proxy:
+      enabled: true
