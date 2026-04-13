@@ -1,0 +1,51 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteSlack
+    displayName: Slack Read and Write 
+    provider: slack
+    read:
+      objects:
+        - objectName: conversations
+          destination: slackWebhook
+          schedule: "*/10 * * * *"
+         # Field names can be found at https://docs.slack.dev/reference/methods/conversations.list/
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFields:
+            - fieldName: is_private
+            - fieldName: is_archived
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: users
+          destination: slackWebhook
+          schedule: "*/10 * * * *"
+         # Field names can be found at https://docs.slack.dev/reference/methods/users.list/
+          requiredFields:
+          - fieldName: id
+          - fieldName: name
+          - fieldName: real_name    
+          optionalFieldsAuto: all  
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: auth.teams
+          destination: slackWebhook
+          # Field names can be found at https://docs.slack.dev/reference/methods/auth.teams.list/
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+    write:
+      objects:
+        - objectName: calls
+        - objectName: bookmarks
+        - objectName: conversations
+    proxy:
+      enabled: true
