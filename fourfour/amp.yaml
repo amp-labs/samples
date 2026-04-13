@@ -1,0 +1,47 @@
+specVersion: 1.0.0
+integrations:
+  - name: fourFour-read
+    displayName: FourFour-integration
+    provider: fourFour
+    read:
+      objects:
+        - objectName: Chats
+          destination: fourFourWebhook
+          schedule: "*/10 * * * *"
+        # https://fourfour.ai/developers/api#tag/Chats/paths/~1Chats/get
+          requiredFields:
+            - fieldName: id
+            - fieldName: created_at
+          optionalFields:
+            - fieldName: filtered_at
+            - fieldName: user_id
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+
+        - objectName: ChatMessages
+          destination: fourFourWebhook
+          schedule: "*/10 * * * *"
+          # https://fourfour.ai/developers/api#tag/ChatMessages/paths/~1ChatMessages/get
+          requiredFields:
+          - fieldName: content
+          - fieldName: created_at
+          - fieldName: id    
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+          
+        - objectName: Labels
+          destination: fourFourWebhook
+          # https://fourfour.ai/developers/api#tag/Labels/paths/~1Labels/get
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: updated
+          optionalFieldsAuto: all
+
+      proxy:
+        enabled: true
