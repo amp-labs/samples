@@ -2,7 +2,7 @@ specVersion: 1.0.0
 integrations:
   - name: read-write-pipedrive
     provider: pipedrive
-    module: "crm" # necessary for v2 APIs.
+    module: "crm" # The CRM module uses v2 APIs
     read:
       objects:
         # Creating a resource for reading Activities object.
