@@ -37,5 +37,20 @@ integrations:
         - objectName: drafts
         - objectName: messages
 
+    # Subscribe actions for real time updates.
+    # See https://docs.withampersand.com/subscribe-actions for more information.
+    subscribe:
+      objects:
+        - objectName: messages
+          destination: myWebhook
+          inheritFieldsAndMapping: true # Inherit the fields and mapping from the read action.
+          createEvent:
+            enabled: always
+          updateEvent:
+            enabled: always
+            watchFieldsAuto: all # Watch all the fields.
+          deleteEvent:
+            enabled: always
+
     proxy:
       enabled: true
