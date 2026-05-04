@@ -30,5 +30,16 @@ integrations:
             - fieldName: country
           optionalFieldsAuto: all
 
+        - objectName: opportunities
+          destination: connectWiseWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: name
+            - fieldName: status
+            - fieldName: notes
+            - fieldName: campaign
+            - fieldName: currency
+          optionalFieldsAuto: all
+
     proxy:
       enabled: true
