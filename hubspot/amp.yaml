@@ -3,7 +3,6 @@ integrations:
   - name: hubspotCRM # If you rename this, you need to update the integration name in src/App.tsx.
     displayName: Hubspot CRM Integration
     provider: hubspot
-    module: crm
     # Define the objects you want to read.
     # See https://docs.withampersand.com/docs/read-actions for more information.
     read:
@@ -42,6 +41,37 @@ integrations:
           backfill:
             defaultPeriod:
               fullHistory: true
+
+        - objectName: campaigns
+          destination: defaultWebhook # define your webhook in Ampersand Dashboard.
+          # These are fields that are always read for every customer.
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: hs_name
+            - fieldName: hs_notes
+            - fieldName: hs_budget_items_sum_amount
+          # Add `optionalFieldsAuto` to allow customers to pick any of their Contact fields,
+          # Alternatively you can include a pre-chosen list in `optionalFields`.
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: marketing/emails
+          destination: defaultWebhook # define your webhook in Ampersand Dashboard.
+          # These are fields that are always read for every customer.
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: subject
+            - fieldName: type
+            - fieldName: updatedAt
+          # Add `optionalFieldsAuto` to allow customers to pick any of their Contact fields,
+          # Alternatively you can include a pre-chosen list in `optionalFields`.
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
 
     # Define the objects you want to write to.
     # See https://docs.withampersand.com/docs/write-actions for more information.
