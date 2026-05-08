@@ -1,7 +1,7 @@
 specVersion: 1.0.0
 integrations:
-  - name: hubspotCRM # If you rename this, you need to update the integration name in src/App.tsx.
-    displayName: Hubspot CRM Integration
+  - name: hubspotIntegration
+    displayName: My Hubspot Integration
     provider: hubspot
     # Define the objects you want to read.
     # See https://docs.withampersand.com/docs/read-actions for more information.
