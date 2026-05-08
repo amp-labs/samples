@@ -57,22 +57,6 @@ integrations:
             defaultPeriod:
               fullHistory: true
 
-        - objectName: marketing/emails
-          destination: defaultWebhook # define your webhook in Ampersand Dashboard.
-          # These are fields that are always read for every customer.
-          schedule: "*/10 * * * *"
-          requiredFields:
-            - fieldName: subject
-            - fieldName: type
-            - fieldName: updatedAt
-          # Add `optionalFieldsAuto` to allow customers to pick any of their Contact fields,
-          # Alternatively you can include a pre-chosen list in `optionalFields`.
-          optionalFieldsAuto: all
-          backfill:
-            defaultPeriod:
-              fullHistory: true
-
-
     # Define the objects you want to write to.
     # See https://docs.withampersand.com/docs/write-actions for more information.
     write:
