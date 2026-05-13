@@ -9,7 +9,6 @@ integrations:
           mapToName: company
           mapToDisplayName: Company
           destination: salesforceWebhook
-          schedule: "*/10 * * * *" # Every 10 minutes
           requiredFields:
             - fieldName: name
             - fieldName: billingcity
@@ -21,7 +20,7 @@ integrations:
           optionalFieldsAuto: all
           backfill:
             defaultPeriod:
-              fullHistory: true
+              days: 7
 
         - objectName: contact
           destination: salesforceWebhook
@@ -29,22 +28,33 @@ integrations:
           requiredFields:
             - fieldName: name
           optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
 
-        - objectName: lead
+    subscribe:
+      objects:
+        - objectName: account
           destination: salesforceWebhook
-          schedule: "*/10 * * * *" # Every 10 minutes
-          requiredFields:
-            - fieldName: name
-            - fieldName: title
-            - fieldName: company
-            - fieldName: status
-          optionalFieldsAuto: all
+          inheritFieldsAndMapping: true
+          createEvent:
+            enabled: always
+          updateEvent:
+            enabled: always
+            requiredWatchFields:
+              - name
+              - city # this is a mapped field
+              - billingpostalcode
+            optionalWatchFieldsAuto: all
+          deleteEvent:
+            enabled: always
+          otherEvents:
+            - UNDELETE
 
     write:
       objects:
         - objectName: account
         - objectName: contact
-        - objectName: lead
 
     proxy:
       enabled: true
