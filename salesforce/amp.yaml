@@ -45,7 +45,6 @@ integrations:
               - name
               - city # this is a mapped field
               - billingpostalcode
-            optionalWatchFieldsAuto: all
           deleteEvent:
             enabled: always
           otherEvents:
