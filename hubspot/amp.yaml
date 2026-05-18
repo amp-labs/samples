@@ -57,6 +57,36 @@ integrations:
             defaultPeriod:
               fullHistory: true
 
+        - objectName: marketing/emails
+          destination: defaultWebhook # define your webhook in Ampersand Dashboard.
+          # These are fields that are always read for every customer.
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: subject
+            - fieldName: type
+            - fieldName: updatedAt
+          optionalFieldsAuto: all
+
+        - objectName: forms
+          destination: defaultWebhook # define your webhook in Ampersand Dashboard.
+          # These are fields that are always read for every customer.
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: name
+            - fieldName: updatedAt
+          optionalFieldsAuto: all
+
+        - objectName: marketing-events
+          destination: defaultWebhook # define your webhook in Ampersand Dashboard.
+          # These are fields that are always read for every customer.
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: eventName
+            - fieldName: eventOrganizer
+            - fieldName: updatedAt
+          optionalFieldsAuto: all
+
+
     # Define the objects you want to write to.
     # See https://docs.withampersand.com/docs/write-actions for more information.
     write:
