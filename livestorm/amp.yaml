@@ -35,17 +35,6 @@ integrations:
             - fieldName: slug
           optionalFieldsAuto: all
 
-        # session_chat_messages requires a session id in the read filter (not set in this manifest).
-        # Use Read API with filter when syncing chat for a known session.
-        # - objectName: session_chat_messages
-        #   destination: livestormWebhook
-        #   schedule: "*/10 * * * *"
-        #   # https://developers.livestorm.co/reference/get_sessions-id-chat-messages
-        #   requiredFields:
-        #     - fieldName: id
-        #     - fieldName: text
-        #   optionalFieldsAuto: all
-
     write:
       objects:
         - objectName: events # https://developers.livestorm.co/reference/post_events
