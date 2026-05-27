@@ -1,0 +1,62 @@
+specVersion: 1.0.0
+integrations:
+  - name: procore-read-and-write
+    displayName: Procore read and write
+    provider: procoreSandbox
+    read:
+      objects:
+        - objectName: companies
+          destination: procoreWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.procore.com/reference/rest/companies?version=latest#list-companies
+          requiredFields:
+            - fieldName: id
+            - fieldName: is_active
+            - fieldName: my_company
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+      
+        - objectName: vendors
+          destination: procoreWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.procore.com/reference/rest/company-vendors?version=latest#list-company-vendors
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+
+        - objectName: company/projects
+          destination: procoreWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.procore.com/reference/rest/company-projects?version=latest#list-companys-projects
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: address
+          optionalFieldsAuto: all
+
+
+        - objectName: submittal_statuses
+          destination: procoreWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developers.procore.com/reference/rest/submittal-statuses?version=latest#list-submittal-statuses
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: status
+          optionalFieldsAuto: all
+
+
+    write:
+      objects:
+        - objectName: company/projects
+        - objectName: programs
+        - objectName: roles
+        - objectName: vendors
+
+    proxy:
+      enabled: true
+
