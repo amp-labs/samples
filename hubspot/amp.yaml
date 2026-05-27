@@ -42,7 +42,7 @@ integrations:
             defaultPeriod:
               fullHistory: true
 
-        - objectName: campaigns
+        - objectName: marketing-campaigns
           destination: defaultWebhook # define your webhook in Ampersand Dashboard.
           # These are fields that are always read for every customer.
           schedule: "*/10 * * * *"
@@ -57,7 +57,7 @@ integrations:
             defaultPeriod:
               fullHistory: true
 
-        - objectName: marketing/emails
+        - objectName: marketing-emails
           destination: defaultWebhook # define your webhook in Ampersand Dashboard.
           # These are fields that are always read for every customer.
           schedule: "*/10 * * * *"
@@ -67,7 +67,7 @@ integrations:
             - fieldName: updatedAt
           optionalFieldsAuto: all
 
-        - objectName: forms
+        - objectName: marketing-forms
           destination: defaultWebhook # define your webhook in Ampersand Dashboard.
           # These are fields that are always read for every customer.
           schedule: "*/10 * * * *"
