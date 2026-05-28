@@ -1,0 +1,10 @@
+# Proxy-only Paddle integration sample.
+# This sample intentionally omits Read Actions and Write Actions.
+
+specVersion: 1.0.0
+integrations:
+  - name: paddleProxy
+    displayName: Paddle proxy
+    provider: paddle
+    proxy:
+      enabled: true
