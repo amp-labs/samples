@@ -1,10 +1,46 @@
-# Proxy-only Paddle integration sample.
-# This sample intentionally omits Read Actions and Write Actions.
-
 specVersion: 1.0.0
 integrations:
-  - name: paddleProxy
-    displayName: Paddle proxy
+  - name: readAndWritePaddle
+    displayName: Paddle read and write
     provider: paddle
+
+    read:
+      objects:
+        - objectName: products
+          destination: paddleWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.paddle.com/api-reference/products/list-products
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: status
+          optionalFieldsAuto: all
+
+        - objectName: prices
+          destination: paddleWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.paddle.com/api-reference/prices/list-prices
+          requiredFields:
+            - fieldName: id
+            - fieldName: product_id
+            - fieldName: status
+          optionalFieldsAuto: all
+
+        - objectName: transactions
+          destination: paddleWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.paddle.com/api-reference/transactions/list-transactions
+          requiredFields:
+            - fieldName: id
+            - fieldName: customer_id
+            - fieldName: status
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: products
+        - objectName: prices
+        - objectName: customers
+
     proxy:
       enabled: true
