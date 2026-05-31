@@ -1,0 +1,24 @@
+# Read + Proxy sample for the Four/Four connector (OAuth2).
+# Demonstrates Read Actions (Conversations backfill delivery) and Proxy Actions
+# against https://fourfour.ai. Four/Four does not support Write or Subscribe.
+specVersion: 1.0.0
+integrations:
+  - name: fourfourReadProxy
+    displayName: Four/Four read + proxy
+    provider: fourFour
+    read:
+      objects:
+        - objectName: Conversations
+          destination: fourfourWebhook
+          schedule: "0 0 * * *"
+          requiredFields:
+            - fieldName: id
+          optionalFieldsAuto: all
+          # Conversations does not support incremental filtering in the connector,
+          # so fullHistory is intentional. Use a bounded defaultPeriod only for
+          # objects with incremental fields, such as Contacts or Accounts.
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+    proxy:
+      enabled: true
