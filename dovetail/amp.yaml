@@ -1,0 +1,11 @@
+# Proxy-only Dovetail integration sample.
+# Per the connector catalog, Dovetail is proxy-only (Read and Write Actions
+# are not supported), so this manifest enables Proxy Actions only.
+
+specVersion: 1.0.0
+integrations:
+  - name: dovetailProxy
+    displayName: Dovetail proxy
+    provider: dovetail
+    proxy:
+      enabled: true
