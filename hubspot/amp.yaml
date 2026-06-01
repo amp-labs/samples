@@ -86,6 +86,15 @@ integrations:
             - fieldName: updatedAt
           optionalFieldsAuto: all
 
+        - objectName: AMPERSAND-event-occurrences-e_form_view_v2
+          mapToName: formViews
+          mapToDisplayName: "Form Views"
+          destination: defaultWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: objectId
+            - fieldName: objectType
+          optionalFieldsAuto: all
 
     # Define the objects you want to write to.
     # See https://docs.withampersand.com/docs/write-actions for more information.
