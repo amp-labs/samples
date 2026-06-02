@@ -1,0 +1,53 @@
+specVersion: 1.0.0
+integrations:
+  - name: goto-read-and-write
+    displayName: GoTo read and write
+    provider: goTo
+    module: goTo
+    read:
+      objects:
+        - objectName: webinars
+          destination: gotoWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.goto.com/GoToWebinarV2#tag/Webinars/operation/getAllAccountWebinars
+          requiredFields:
+            - fieldName: webinarID
+            - fieldName: accountKey
+            - fieldName: omid
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+      
+        - objectName: historicalMeetings
+          destination: gotoWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.goto.com/GoToMeetingV1#tag/Meetings/operation/getHistoricalMeetings
+          requiredFields:
+            - fieldName: accountKey
+            - fieldName: email
+            - fieldName: meetingId
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: licenses
+          destination: gotoWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://developer.goto.com/admin#tag/Licenses/operation/Get%20Licenses
+          requiredFields:
+            - fieldName: key
+            - fieldName: seats
+          optionalFieldsAuto: all
+
+
+    write:
+      objects:
+        - objectName: meetings
+        - objectName: webhooks
+        - objectName: attributes
+
+    proxy:
+      enabled: true
+
