@@ -13,9 +13,10 @@ integrations:
             - fieldName: title
             - fieldName: meeting_title
             - fieldName: created_at
+            - fieldName: transcript
+            - fieldName: default_summary
           optionalFields:
             - fieldName: transcript_language
-            - fieldName: transcript
             - fieldName: meeting_type
             - fieldName: scheduled_end_time
           backfill:
@@ -31,8 +32,6 @@ integrations:
             - fieldName: created_at
           optionalFieldsAuto: all   
 
-
-
         - objectName: team_members
           destination: fathomWebhook
           schedule: "*/10 * * * *"
@@ -41,7 +40,6 @@ integrations:
             - fieldName: name
             - fieldName: email
           optionalFieldsAuto: all   
-
 
     write:
       objects:
