@@ -1,0 +1,21 @@
+# Read + Write + Proxy sample for the Gusto connector (OAuth2).
+# Demonstrates Read Actions for companies, Write Actions for employees, and Proxy Actions.
+specVersion: 1.0.0
+integrations:
+  - name: gustoReadWriteProxy
+    displayName: Gusto read, write, and proxy
+    provider: gusto
+    read:
+      objects:
+        - objectName: companies
+          destination: gustoWebhook
+          schedule: "0 0 * * *"
+          requiredFields:
+            - fieldName: uuid
+            - fieldName: name
+          optionalFieldsAuto: all
+    write:
+      objects:
+        - objectName: employees
+    proxy:
+      enabled: true
