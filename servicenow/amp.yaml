@@ -4,7 +4,7 @@ integrations:
     provider: serviceNow
     read:
       objects:
-        - objectName: now/table/incident
+        - objectName: incident
           destination: serviceNowWebhook
           schedule: "*/30 * * * *" # Every 30 minutes
           requiredFields:
@@ -15,18 +15,7 @@ integrations:
           optionalFields:
             - fieldName: impact
 
-        - objectName: now/table/cmdb_ci_email_server
-          destination: serviceNowWebhook
-          schedule: "*/30 * * * *" # Every 30 minutes
-          requiredFields:
-            - fieldName: id
-            - fieldName: operational_status
-            - fieldName: sys_domain
-            - fieldName: sys_class_name
-          optionalFields:
-            - fieldName: city
-
-        - objectName: now/contact
+        - objectName: contact
           destination: serviceNowWebhook
           schedule: "*/30 * * * *" # Every 30 minutes
           requiredFields:
@@ -37,6 +26,6 @@ integrations:
 
     write:
       objects:
-        - objectName: now/contact
-        - objectName: now/table/incident
-        - objectName: now/consumer
+        - objectName: contact
+        - objectName: incident
+        - objectName: consumer
