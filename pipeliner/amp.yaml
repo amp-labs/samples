@@ -1,0 +1,48 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWritePipeliner
+    displayName: Pipeliner read and write
+    provider: pipeliner
+    # Define what you want to read
+    # Learn more: https://docs.withampersand.com/docs/read-actions
+    read:
+      objects:
+
+        - objectName: Contacts
+          destination: pipelinerWebhook # define a webhook in the Ampersand Console
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Fields to read for every contact
+          # Field names can be found at https://pipelinercrm.eu.apidog.com/contacts-list-3640865e0
+          requiredFields:
+            - fieldName: id
+            - fieldName: account_position
+            - fieldName: formatted_name
+          # All other fields can be optionally selected by the customer
+          optionalFieldsAuto: all
+
+        - objectName: Notes
+          destination: pipelinerWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://pipelinercrm.eu.apidog.com/notes-list-3641442e0
+          requiredFields:
+            - fieldName: id
+            - fieldName: note
+          optionalFieldsAuto: all
+
+        - objectName: Quotes
+          destination: pipelinerWebhook
+          schedule: "*/10 * * * *"
+          # Field names can be found at https://pipelinercrm.eu.apidog.com/quotes-list-3641676e0
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: total_amount
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: Contacts # https://pipelinercrm.eu.apidog.com/contacts-create-3640866e0
+        - objectName: Notes # https://pipelinercrm.eu.apidog.com/notes-create-3641443e0
+
+    proxy:
+      enabled: true
