@@ -1,6 +1,6 @@
 specVersion: 1.0.0
 integrations:
-  - name: serviceNow-integration
+  - name: read-write-servicenow
     provider: serviceNow
     read:
       objects:
@@ -18,10 +18,25 @@ integrations:
         - objectName: contact
           destination: serviceNowWebhook
           schedule: "*/30 * * * *" # Every 30 minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
           requiredFields:
             - fieldName: country
             - fieldName: last_login_device
             - fieldName: phone
+          optionalFieldsAuto: all
+
+        - objectName: lead
+          destination: serviceNowWebhook
+          schedule: "*/30 * * * *" # Every 30 minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: short_description
+            - fieldName: number
+            - fieldName: state
           optionalFieldsAuto: all
 
     write:
