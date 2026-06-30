@@ -1,0 +1,88 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteBreezy
+    displayName: Breezy HR read and write
+    provider: breezy
+
+    # Define what you want to read
+    # Learn more: https://docs.withampersand.com/docs/read-actions
+    read:
+      objects:
+
+        - objectName: companies
+          destination: breezyWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://developer.breezy.hr/reference/companies
+          requiredFields:
+            - fieldName: _id
+            - fieldName: name
+            - fieldName: updated_date
+          optionalFieldsAuto: all
+
+        - objectName: positions
+          destination: breezyWebhook
+          schedule: "*/10 * * * *"
+          # https://developer.breezy.hr/reference/company-positions
+          # Incremental read uses updated_date (connector-side filter).
+          # Default list returns published positions only.
+          requiredFields:
+            - fieldName: _id
+            - fieldName: name
+            - fieldName: state
+            - fieldName: updated_date
+          optionalFieldsAuto: all
+
+        - objectName: pipelines
+          destination: breezyWebhook
+          schedule: "*/10 * * * *"
+          # https://developer.breezy.hr/reference/company-pipelines
+          requiredFields:
+            - fieldName: _id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: categories
+          destination: breezyWebhook
+          schedule: "*/10 * * * *"
+          # https://developer.breezy.hr/reference/company-pipelines-1-1
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: departments
+          destination: breezyWebhook
+          schedule: "*/10 * * * *"
+          # https://developer.breezy.hr/reference/company-pipelines-1
+          requiredFields:
+            - fieldName: _id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: questionnaires
+          destination: breezyWebhook
+          schedule: "*/10 * * * *"
+          # https://developer.breezy.hr/reference/company-questionnaires
+          requiredFields:
+            - fieldName: _id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: templates
+          destination: breezyWebhook
+          schedule: "*/10 * * * *"
+          # https://developer.breezy.hr/reference/company-templates
+          requiredFields:
+            - fieldName: _id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        # Create, update, and delete (archive) are supported for positions only.
+        # Delete is a soft delete: sets state to archived.
+        # https://developer.breezy.hr/reference/company-positions-add
+        - objectName: positions
+
+    proxy:
+      enabled: true
