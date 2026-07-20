@@ -32,6 +32,12 @@ integrations:
           requiredFields:
             - fieldName: firstName
             - fieldName: lastName
+            - fieldName: AMPERSAND-defaultEmail
+            - fieldName: AMPERSAND-defaultEmailId
+            - fieldName: AMPERSAND-defaultPhone
+            - fieldName: AMPERSAND-defaultPhoneId
+            - fieldName: AMPERSAND-defaultFax
+            - fieldName: AMPERSAND-defaultFaxId
 
         - objectName: project/tickets
           destination: connectWiseWebhook
