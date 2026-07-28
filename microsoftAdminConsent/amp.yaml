@@ -1,0 +1,52 @@
+specVersion: 1.0.0
+integrations:
+  # App-only (admin consent) access to the Microsoft Graph API. A tenant admin
+  # grants consent once for the whole org, so these run without any per-user login.
+  # Requires Application permissions on the Azure app (e.g. User.Read.All,
+  # Group.Read.All) — see https://docs.withampersand.com/provider-guides/microsoftAdminConsent
+  - name: readMicrosoftGraph
+    displayName: Read Microsoft Graph (Admin consent)
+    provider: microsoftAdminConsent
+    # Define the objects you want to read.
+    # See https://docs.withampersand.com/read-actions for more information.
+    read:
+      objects:
+        # Requires the User.Read.All Application permission.
+        - objectName: users
+          destination: microsoftWebhook # define your webhook in the Ampersand Dashboard.
+          schedule: "*/30 * * * *" # Every 30 minutes.
+          requiredFields:
+            - fieldName: id
+            - fieldName: displayName
+            - fieldName: userPrincipalName
+            - fieldName: mail
+            - fieldName: accountEnabled
+            - mapToName: department
+              mapToDisplayName: Department
+              prompt: Which field tracks the user's department?
+          # Let customers pick any additional user field.
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        # Requires the Group.Read.All Application permission.
+        - objectName: groups
+          destination: microsoftWebhook
+          schedule: "*/30 * * * *" # Every 30 minutes.
+          requiredFields:
+            - fieldName: id
+            - fieldName: displayName
+            - fieldName: description
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+  # Make authenticated calls straight through to the Microsoft Graph API.
+  # See https://docs.withampersand.com/proxy-actions for more information.
+  - name: proxyMicrosoftGraph
+    displayName: Proxy Microsoft Graph (Admin consent)
+    provider: microsoftAdminConsent
+    proxy:
+      enabled: true
