@@ -7,7 +7,7 @@ integrations:
       objects:
         - objectName: lists
           destination: sendGridWebhook
-          schedule: "0 */6 * * *"
+          schedule: "*/10 * * * *"
           # Field names: https://www.twilio.com/docs/sendgrid/api-reference/lists/get-all-lists
           requiredFields:
             - fieldName: id
@@ -20,7 +20,7 @@ integrations:
 
         - objectName: templates
           destination: sendGridWebhook
-          schedule: "0 */6 * * *"
+          schedule: "*/10 * * * *"
           # Field names: https://www.twilio.com/docs/sendgrid/api-reference/templates-api/retrieve-all-templates
           requiredFields:
             - fieldName: id
@@ -34,7 +34,7 @@ integrations:
 
         - objectName: bounces
           destination: sendGridWebhook
-          schedule: "0 */6 * * *"
+          schedule: "*/10 * * * *"
           # Field names: https://www.twilio.com/docs/sendgrid/api-reference/bounces-api/retrieve-all-bounces
           requiredFields:
             - fieldName: email
@@ -48,7 +48,7 @@ integrations:
 
         - objectName: asm_groups
           destination: sendGridWebhook
-          schedule: "0 */6 * * *"
+          schedule: "*/10 * * * *"
           # Field names: https://www.twilio.com/docs/sendgrid/api-reference/suppressions-unsubscribe-groups/retrieve-all-suppression-groups
           requiredFields:
             - fieldName: id
