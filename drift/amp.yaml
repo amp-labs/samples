@@ -1,0 +1,34 @@
+specVersion: 1.0.0
+integrations:
+  - name: drift-integration
+    provider: drift
+    read:
+      objects:
+        # More fields can be seen here
+        # https://devdocs.drift.com/docs/get-playbooks
+        - objectName: playbooks
+          destination: driftWebhook
+          schedule: "*/10 * * * *" # every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: orgId
+            - fieldName: reportType
+          optionalFields:
+            - fieldName: meta
+
+        # More fields can be seen here
+        # https://devdocs.drift.com/docs/list-conversations
+        - objectName: conversations
+          destination: driftWebhook
+          schedule: "*/10 * * * *" # every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: participants
+            - fieldName: status
+            - fieldName: contactId
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: contacts
