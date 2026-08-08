@@ -1,0 +1,51 @@
+specVersion: 1.0.0
+integrations:
+  - name: odooIntegration
+    displayName: Odoo Integration
+    provider: odoo
+    read:
+      objects:
+        - objectName: crm.iap.lead.role
+          destination: odooWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: write_date
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: crm.lead
+          destination: odooWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: write_date
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+        - objectName: res.partner
+          destination: odooWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: write_date
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              days: 15
+
+    write:
+      objects:
+        - objectName: crm.iap.lead.role
+        - objectName: crm.lead
+        - objectName: res.partner
+
+    proxy:
+      enabled: true
