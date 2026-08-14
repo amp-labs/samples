@@ -1,0 +1,45 @@
+specVersion: 1.0.0
+integrations:
+  - name: zoho-mail-subscribe
+    provider: zoho
+    module: mail
+    read: # Read action is required for subscribe actions
+      objects:
+        - objectName: messages
+          destination: zohoMailWebhook
+          # schedule: "*/30 * * * *" # every 30 minutes
+          requiredFields:
+            - fieldName: messageId
+            - fieldName: subject
+            - fieldName: fromAddress
+            - fieldName: receivedTime
+          optionalFields:
+            - fieldName: toAddress
+            - fieldName: summary
+        - objectName: tasks
+          destination: zohoMailWebhook
+          requiredFields:
+            - fieldName: id
+            - fieldName: title
+          optionalFieldsAuto: all
+    subscribe:
+      objects:
+        # Zoho Mail only sends webhooks for newly received emails, so
+        # messages support createEvent only.
+        - objectName: messages
+          destination: zohoMailWebhook
+          inheritFieldsAndMapping: true
+          createEvent:
+            enabled: always
+        # Task webhooks fire on group task activity; the task "action"
+        # is mapped to create/update/delete events.
+        - objectName: tasks
+          destination: zohoMailWebhook
+          inheritFieldsAndMapping: true
+          createEvent:
+            enabled: always
+          updateEvent:
+            enabled: always
+            watchFieldsAuto: all
+          deleteEvent:
+            enabled: always
