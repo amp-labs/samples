@@ -1,7 +1,7 @@
 specVersion: 1.0.0
 integrations:
   - name: read-zoominfo
-    provider: zoominfo
+    provider: zoomInfo
     read:
       objects:
         - objectName: industries
