@@ -1,0 +1,24 @@
+specVersion: 1.0.0
+integrations:
+  - name: readWriteLob
+    displayName: Lob read, write, and proxy.
+    provider: lob
+
+    read:
+      objects:
+        - objectName: addresses
+          destination: lobWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://docs.lob.com/#tag/Addresses/operation/addresses_list
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: email
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: addresses
+
+    proxy:
+      enabled: true
