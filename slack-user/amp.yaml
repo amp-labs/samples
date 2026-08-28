@@ -1,12 +1,12 @@
 specVersion: 1.0.0
 integrations:
-  - name: readAndWriteSlackBot
-    displayName: Slack Bot Read and Write
-    provider: slack
+  - name: readAndWriteSlackUser
+    displayName: Slack User Read and Write
+    provider: slackUserScope
     read:
       objects:
         - objectName: conversations
-          destination: slackBotWebhook
+          destination: slackUserWebhook
           schedule: "*/10 * * * *"
          # Field names can be found at https://docs.slack.dev/reference/methods/conversations.list/
           requiredFields:
@@ -20,7 +20,7 @@ integrations:
               fullHistory: true
 
         - objectName: users
-          destination: slackBotWebhook
+          destination: slackUserWebhook
           schedule: "*/10 * * * *"
          # Field names can be found at https://docs.slack.dev/reference/methods/users.list/
           requiredFields:
@@ -33,7 +33,7 @@ integrations:
               fullHistory: true
 
         - objectName: auth.teams
-          destination: slackBotWebhook
+          destination: slackUserWebhook
           # Field names can be found at https://docs.slack.dev/reference/methods/auth.teams.list/
           schedule: "*/10 * * * *"
           requiredFields:
