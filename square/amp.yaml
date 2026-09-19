@@ -1,0 +1,67 @@
+specVersion: 1.0.0
+integrations:
+  - name: square-read-write
+    displayName: Square Read/Write
+    provider: square
+    read:
+      objects:
+        # Field names can be found at https://developer.squareup.com/reference/square/locations-api/list-locations
+        - objectName: locations
+          destination: squareReadWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: country
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        # Field names can be found at https://developer.squareup.com/reference/square/customers-api/list-customers
+        - objectName: customers
+          destination: squareReadWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: given_name
+            - fieldName: email_address
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        # Field names can be found at https://developer.squareup.com/reference/square/payments-api/list-payments
+        - objectName: payments
+          destination: squareReadWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: status
+            - fieldName: amount_money
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        # Field names can be found at https://developer.squareup.com/reference/square/catalog-api/list-catalog
+        - objectName: catalog
+          destination: squareReadWebhook
+          schedule: "*/10 * * * *"
+          requiredFields:
+            - fieldName: id
+            - fieldName: type
+            - fieldName: version
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+    write:
+      objects:
+        - objectName: customers
+        - objectName: locations
+        - objectName: payments
+
+    proxy:
+      enabled: true
