@@ -1,0 +1,48 @@
+specVersion: 1.0.0
+integrations:
+  - name: read-write-chargeover
+    provider: chargeOver
+    read:
+      objects:
+        # More fields can be seen here
+        # https://developer.chargeover.com/docs/api/query-for-customers
+        - objectName: customer
+          destination: chargeoverWebhook
+          schedule: "*/10 * * * *" # every 10 minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: admin_email
+            - fieldName: admin_id
+            - fieldName: arr
+            - fieldName: tax_ident
+          optionalFieldsAuto: all
+
+        # More fields can be seen here
+        # https://developer.chargeover.com/docs/api/query-for-invoices
+        - objectName: invoice
+          destination: chargeoverWebhook
+          schedule: "*/10 * * * *" # every 10 minutes
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+          requiredFields:
+            - fieldName: credits
+            - fieldName: balance
+          optionalFieldsAuto: all
+        # More fields can be seen here
+        # https://developer.chargeover.com/docs/api/querying-for-items
+        - objectName: item
+          destination: chargeoverWebhook
+          schedule: "*/10 * * * *" # every 10 minutes
+          requiredFields:
+            - fieldName: name
+            - fieldName: units
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: customer
+        - objectName: invoice
+        - objectName: item
