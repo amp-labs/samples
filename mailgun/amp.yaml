@@ -1,5 +1,5 @@
 # Mailgun Integration
-# API Documentation: https://documentation.mailgun.com/docs/mailgun/api-reference/intro/
+# API Documentation: https://documentation.mailgun.com/docs/mailgun/api-reference/api-overview
 
 specVersion: 1.0.0
 integrations:
