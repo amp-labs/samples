@@ -1,0 +1,104 @@
+# Mailgun Integration
+# API Documentation: https://documentation.mailgun.com/docs/mailgun/api-reference/intro/
+
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteMailgun
+    displayName: Mailgun read and write
+    provider: mailgun
+
+    # Define what you want to read
+    # Learn more: https://docs.withampersand.com/docs/read-actions
+    read:
+      objects:
+        - objectName: domains
+          destination: mailgunWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domains/get-v4-domains
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: state
+          optionalFieldsAuto: all
+
+        - objectName: bounces
+          destination: mailgunWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/bounces/get-v3--domainid--bounces
+          requiredFields:
+            - fieldName: address
+            - fieldName: code
+            - fieldName: created_at
+          optionalFieldsAuto: all
+
+        - objectName: unsubscribes
+          destination: mailgunWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/unsubscribe/get-v3--domainid--unsubscribes
+          requiredFields:
+            - fieldName: address
+            - fieldName: created_at
+          optionalFieldsAuto: all
+
+        - objectName: lists
+          destination: mailgunWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/mailing-lists/get-v3-lists
+          requiredFields:
+            - fieldName: address
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: routes
+          destination: mailgunWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/routes/get-v3-routes
+          requiredFields:
+            - fieldName: id
+            - fieldName: expression
+            - fieldName: actions
+          optionalFieldsAuto: all
+
+        - objectName: templates
+          destination: mailgunWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-templates/get-v3--domain-name--templates
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+          optionalFieldsAuto: all
+
+        - objectName: webhooks
+          destination: mailgunWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/account-webhooks/get-v1-webhooks
+          requiredFields:
+            - fieldName: webhook_id
+            - fieldName: url
+            - fieldName: event_types
+          optionalFieldsAuto: all
+
+        - objectName: analytics/logs
+          destination: mailgunWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/logs/post-v1-analytics-logs
+          # Log retention depends on the Mailgun plan; keep any backfill period within it.
+          requiredFields:
+            - fieldName: id
+            - fieldName: event
+            - fieldName: "@timestamp"
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: messages # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/messages/post-v3--domain-name--messages (create only)
+        - objectName: lists # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/mailing-lists/post-v3-lists
+        - objectName: lists/members # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/mailing-lists/post-lists-string:list_address-members (requires list_address)
+        - objectName: routes # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/routes/post-v3-routes
+        - objectName: templates # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/domain-templates/post-v3--domain-name--templates
+        - objectName: webhooks # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/account-webhooks/post-v1-webhooks
+        - objectName: bounces # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/bounces/post-v3--domainid--bounces (create only)
+        - objectName: unsubscribes # https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/unsubscribe/post-v3--domainid--unsubscribes (create only)
+
+    proxy:
+      enabled: true
