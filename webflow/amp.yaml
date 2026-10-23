@@ -1,0 +1,86 @@
+specVersion: 1.0.0
+integrations:
+  # Webflow read + write (Data API v2).
+  # Docs: https://developers.webflow.com/data/reference
+  - name: readWriteWebflow
+    displayName: Webflow read and write
+    provider: webflow
+
+    read:
+      objects:
+        # https://developers.webflow.com/data/reference/sites/list
+        - objectName: sites
+          destination: webflowWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: displayName
+            - fieldName: lastUpdated
+          optionalFields:
+            - fieldName: shortName
+            - fieldName: timeZone
+            - fieldName: lastPublished
+
+        # https://developers.webflow.com/data/reference/pages-and-components/pages/list
+        - objectName: pages
+          destination: webflowWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: title
+            - fieldName: slug
+          optionalFields:
+            - fieldName: draft
+            - fieldName: archived
+            - fieldName: seo
+            - fieldName: lastUpdated
+
+        # https://developers.webflow.com/data/reference/cms/collections/list
+        - objectName: collections
+          destination: webflowWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: displayName
+            - fieldName: singularName
+          optionalFieldsAuto: all
+
+        # https://developers.webflow.com/data/reference/assets/assets/list
+        - objectName: assets
+          destination: webflowWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: displayName
+          optionalFields:
+            - fieldName: contentType
+            - fieldName: size
+            - fieldName: hostedUrl
+            - fieldName: lastUpdated
+
+        # Incremental: Since -> lastUpdated (server sort, newest first).
+        # https://developers.webflow.com/data/reference/comments/list-comment-threads
+        - objectName: comments
+          destination: webflowWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          requiredFields:
+            - fieldName: id
+            - fieldName: content
+            - fieldName: lastUpdated
+          optionalFields:
+            - fieldName: isResolved
+            - fieldName: pageId
+          backfill:
+            defaultPeriod:
+              days: 30
+
+    # Create/update endpoints per object are listed in write.http.
+    write:
+      objects:
+        - objectName: collections
+        - objectName: webhooks
+        - objectName: assets
+        - objectName: pages
+
+    proxy:
+      enabled: true
