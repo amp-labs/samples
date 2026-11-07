@@ -1,0 +1,88 @@
+specVersion: 1.0.0
+integrations:
+  - name: read-and-write-callrail-2
+    provider: callRail
+    read:
+      objects:
+        - objectName: companies
+          destination: callRailWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://apidocs.callrail.com/#listing-all-companies
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: status
+            - fieldName: time_zone
+            - fieldName: dni_active
+            - fieldName: lead_scoring_enabled
+          optionalFieldsAuto: all
+
+        - objectName: leads
+          destination: callRailWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://apidocs.callrail.com/#listing-all-leads
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: phone
+            - fieldName: email
+            - fieldName: company_id
+            - fieldName: created_at
+          optionalFieldsAuto: all
+
+        - objectName: tags
+          destination: callRailWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://apidng-all-tags
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: tag_level
+            - fieldName: color
+            - fieldName: status
+            - fieldName: company_id
+          optionalFieldsAuto: all
+
+        - objectName: users
+          destination: callRailWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://apidocs.callrail.com/#listing-all-users
+          requiredFields:
+            - fieldName: id
+            - fieldName: email
+            - fieldName: name
+            - fieldName: role
+            - fieldName: created_at
+          optionalFieldsAuto: all
+
+        - objectName: notifications
+          destination: callRailWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://apidocs.callrail.com/#listing-all-notifications
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: user_id
+            - fieldName: alert_type
+            - fieldName: call_enabled
+            - fieldName: sms_enabled
+          optionalFieldsAuto: all
+
+        - objectName: summary_emails
+          destination: callRailWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # Field names come from https://apidall-summary-email-subscriptions
+          requiredFields:
+            - fieldName: id
+            - fieldName: scope
+            - fieldName: frequency
+            - fieldName: config
+            - fieldName: user
+          optionalFieldsAuto: all
+
+    write:
+      objects:
+        - objectName: trackers
+        - objectName: tags
+    proxy:
+      enabled: true
