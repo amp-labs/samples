@@ -1,0 +1,75 @@
+# Grain Integration
+# API Documentation: https://developers.grain.com/endpoints.html
+
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteGrain
+    displayName: Grain read and write
+    provider: grain
+
+    # Define what you want to read
+    # Learn more: https://docs.withampersand.com/docs/read-actions
+    read:
+      objects:
+        - objectName: recordings
+          destination: grainWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://developers.grain.com/endpoints.html#recording
+          requiredFields:
+            - fieldName: id
+            - fieldName: title
+            - fieldName: start_datetime
+          optionalFieldsAuto: all
+
+        - objectName: uploads
+          destination: grainWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://developers.grain.com/endpoints.html#upload
+          requiredFields:
+            - fieldName: id
+            - fieldName: status
+            - fieldName: updated_datetime
+          optionalFields:
+            - fieldName: title
+            - fieldName: media_type
+            - fieldName: recording_id
+            - fieldName: attributes
+          backfill:
+            defaultPeriod:
+              days: 30
+
+        - objectName: users
+          destination: grainWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://developers.grain.com/endpoints.html#user
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: email
+
+        - objectName: teams
+          destination: grainWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://developers.grain.com/endpoints.html#team
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+
+        - objectName: meeting_types
+          destination: grainWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://developers.grain.com/endpoints.html#meeting-type
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: scope
+
+    # Define the objects you want to write to.
+    # See https://docs.withampersand.com/docs/write-actions for more information.
+    write:
+      objects:
+        - objectName: recordings # https://developers.grain.com/endpoints.html#update-recording
+        - objectName: uploads # https://developers.grain.com/endpoints.html#create-upload
+
+    proxy:
+      enabled: true
