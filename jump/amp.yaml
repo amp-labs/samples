@@ -1,0 +1,109 @@
+# Jump Integration
+# API Documentation: https://my.jumpapp.com/enterprise/documentation
+
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteJump
+    displayName: Jump read and write
+    provider: jump
+
+    # Define what you want to read
+    # Learn more: https://docs.withampersand.com/docs/read-actions
+    read:
+      objects:
+        - objectName: contacts
+          destination: jumpWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-contacts
+          # requiredFields are always synced on every record.
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: email
+            - fieldName: updatedAt
+          # optionalFieldsAuto: all syncs every other available field automatically.
+          optionalFieldsAuto: all
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: meetings
+          destination: jumpWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-meetings
+          requiredFields:
+            - fieldName: id
+            - fieldName: topic
+            - fieldName: startedAt
+            - fieldName: updatedAt
+          # Alternatively, pin a specific set of optional fields instead of
+          # syncing them all with optionalFieldsAuto: all.
+          optionalFields:
+            - fieldName: endedAt
+            - fieldName: duration
+            - fieldName: status
+            - fieldName: meetingType
+            - fieldName: owner
+            - fieldName: participants
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: notes
+          destination: jumpWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-notes
+          requiredFields:
+            - fieldName: id
+            - fieldName: subject
+            - fieldName: updatedAt
+          optionalFields:
+            - fieldName: meetingId
+            - fieldName: note
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: tasks
+          destination: jumpWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-tasks
+          requiredFields:
+            - fieldName: id
+            - fieldName: title
+            - fieldName: status
+            - fieldName: updatedAt
+          optionalFields:
+            - fieldName: description
+            - fieldName: due
+            - fieldName: meetingId
+            - fieldName: assignee
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+        - objectName: users
+          destination: jumpWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://my.jumpapp.com/enterprise/documentation/reference?tab=queries#query-users
+          requiredFields:
+            - fieldName: id
+            - fieldName: email
+            - fieldName: fullName
+            - fieldName: updatedAt
+          optionalFields:
+            - fieldName: firstName
+            - fieldName: lastName
+            - fieldName: deactivatedAt
+          backfill:
+            defaultPeriod:
+              fullHistory: true
+
+    # Define the objects you want to write to.
+    # See https://docs.withampersand.com/docs/write-actions for more information.
+    write:
+      objects:
+        - objectName: contacts # https://my.jumpapp.com/enterprise/documentation/reference?tab=mutations
+
+    proxy:
+      enabled: true
