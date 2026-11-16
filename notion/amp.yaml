@@ -1,0 +1,80 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteNotion
+    displayName: Notion read and write (deep connector test)
+    provider: notion
+
+    read:
+      objects:
+        - objectName: users
+          destination: notionWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://developers.notion.com/reference/get-users
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: type
+          optionalFieldsAuto: all
+
+        - objectName: file_uploads
+          destination: notionWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://developers.notion.com/reference/list-file-uploads
+          requiredFields:
+            - fieldName: id
+            - fieldName: filename
+            - fieldName: status
+            - fieldName: last_edited_time
+          optionalFields:
+            - fieldName: content_type
+            - fieldName: created_time
+            - fieldName: upload_url
+
+    write:
+      objects:
+        # Create only; Notion has no user write or file_upload update/delete APIs.
+        - objectName: file_uploads
+          inheritMapping: true
+
+    proxy:
+      enabled: true
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteNotion
+    displayName: Notion read and write (deep connector test)
+    provider: notion
+
+    read:
+      objects:
+        - objectName: users
+          destination: notionWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://developers.notion.com/reference/get-users
+          requiredFields:
+            - fieldName: id
+            - fieldName: name
+            - fieldName: type
+          optionalFieldsAuto: all
+
+        - objectName: file_uploads
+          destination: notionWebhook
+          schedule: "*/10 * * * *" # Every 10 minutes
+          # https://developers.notion.com/reference/list-file-uploads
+          requiredFields:
+            - fieldName: id
+            - fieldName: filename
+            - fieldName: status
+            - fieldName: last_edited_time
+          optionalFields:
+            - fieldName: content_type
+            - fieldName: created_time
+            - fieldName: upload_url
+
+    write:
+      objects:
+        # Create only; Notion has no user write or file_upload update/delete APIs.
+        - objectName: file_uploads
+          inheritMapping: true
+
+    proxy:
+      enabled: true
