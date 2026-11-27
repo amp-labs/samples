@@ -1,0 +1,38 @@
+specVersion: 1.0.0
+integrations:
+  - name: readAndWriteDropbox
+    displayName: Dropbox Integration
+    provider: dropbox
+    read:
+      objects:
+        - objectName: file_requests
+          destination: defaultWebhook
+          schedule: "*/30 * * * *"
+          optionalFieldsAuto: all
+
+        - objectName: files
+          destination: defaultWebhook
+          schedule: "0 */6 * * *"
+
+        - objectName: shared_links
+          destination: defaultWebhook
+          schedule: "0 */6 * * *"
+
+        - objectName: shared_folders
+          destination: defaultWebhook
+          schedule: "0 2 * * *"
+
+        - objectName: mountable_shared_folders
+          destination: defaultWebhook
+          schedule: "0 2 * * *"
+
+        - objectName: received_files
+          destination: defaultWebhook
+          schedule: "0 3 * * *"
+
+    write:
+      objects:
+        - objectName: file_requests
+
+    proxy:
+      enabled: true
